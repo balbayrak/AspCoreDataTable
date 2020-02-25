@@ -1,4 +1,17 @@
-﻿var DataTableFunc = {
+﻿var DataTableConstant =
+{
+    EmptyMessage: "Tabloda herhangi bir veri mevcut değil",
+    SInfo: "_MAX_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+    LoadingRecords: "Yükleniyor...",
+    SSearch: "Ara",
+    PaginateFirst: "İlk",
+    PaginateLast: "Son",
+    PaginateNext: "Sonraki",
+    PaginatePrevious: "Önceki",
+}
+
+
+var DataTableFunc = {
 
     initDataTable: function (tableid) {
         var item = $("#" + tableid);
@@ -27,18 +40,21 @@
             aoColumns.push({ 'mDataProp': prop, "bSortable": sortable, "sWidth": widthstr });
         }
 
-        var semptytable = $(item).data('semptytable');
-        var sInfo = $(item).data('sinfo');
-        var sInfoEmpty = $(item).data('sinfoempty');
-        var sLoadingRecords = $(item).data('sloadingrecords');
-        var sProcessing = $(item).data('sprocessing');
-        var sSearch = $(item).data('ssearch');
-        var sFirst = $(item).data('sfirst');
-        var sLast = $(item).data('slast');
-        var sNext = $(item).data('snext');
-        var sPrevious = $(item).data('sprevious');
+        //var semptytable = $(item).data('semptytable');
+        //var sInfo = $(item).data('sinfo');
+        //var sInfoEmpty = $(item).data('sinfoempty');
+        //var sLoadingRecords = $(item).data('sloadingrecords');
+        //var sProcessing = $(item).data('sprocessing');
+        //var sSearch = $(item).data('ssearch');
+        //var sFirst = $(item).data('sfirst');
+        //var sLast = $(item).data('slast');
+        //var sNext = $(item).data('snext');
+        //var sPrevious = $(item).data('sprevious');
         var ssearchenabled = false;
         var ssearchenabledstr = $(item).data('ssearch-enabled');
+
+        var columnInfo = $(item).data('columninfo');
+
         if (typeof ssearchenabledstr !== 'undefined') {
             if (ssearchenabledstr.toLowerCase() === "true")
                 ssearchenabled = true;
@@ -60,23 +76,25 @@
             "order": orderColumns,
             "oLanguage": {
                 "sDecimal": ",",
-                "sEmptyTable": semptytable,
-                "sInfo": sInfo,
-                "sInfoEmpty": sInfoEmpty,
-                "sLoadingRecords": sLoadingRecords,
-                "sProcessing": sProcessing,
-                "sSearch": sSearch,
+                "sEmptyTable": DataTableConstant.EmptyMessage,
+                "sInfo": DataTableConstant.SInfo,
+                "sInfoEmpty": "",
+                "sLoadingRecords": DataTableConstant.LoadingRecords,
+                "sProcessing": DataTableConstant.LoadingRecords,
+                "sSearch": DataTableConstant.SSearch,
                 "oPaginate": {
-                    "sFirst": sFirst,
-                    "sLast": sLast,
-                    "sNext": sNext,
-                    "sPrevious": sPrevious
+                    "sFirst": DataTableConstant.PaginateFirst,
+                    "sLast": DataTableConstant.PaginateLast,
+                    "sNext": DataTableConstant.PaginateNext,
+                    "sPrevious": DataTableConstant.PaginatePrevious
                 }
             },
             buttons: tablebuttons,
             "aoColumns": aoColumns,
+
             fnServerParams: function (aoData) {
                 aoData.push({ name: "datatableId", value: uniqueid });
+                aoData.push({ name: "columnInfo", value: columnInfo });
             }
 
             //fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {

@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AspCoreDataTable.Core.DataTable.ModelBinder;
 using AspCoreDataTable.Core.DataTable.Storage;
-using AspCoreDataTable.Core.Storage;
+using AspCoreDataTable.Core.Extensions;
 using AspCoreDataTable.General;
 using AspCoreDataTable.Test.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AspCoreDataTable.Test.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IStorage _storage;
-        public HomeController(IStorage storage)
+        public HomeController()
         {
-            _storage = storage;
         }
 
         public IActionResult Index()
@@ -26,7 +23,7 @@ namespace AspCoreDataTable.Test.Controllers
         }
 
         [HttpPost]
-        public JsonResult LoadTable(JQueryDataTablesModel jQueryDataTablesModel)
+        public JsonResult LoadTable([ModelBinder(binderType: typeof(JQueryDataTablesModelBinder))] JQueryDataTablesModel jQueryDataTablesModel)
         {
             try
             {
@@ -84,12 +81,12 @@ namespace AspCoreDataTable.Test.Controllers
                     result = personList.Skip(jQueryDataTablesModel.iDisplayStart).Take(jQueryDataTablesModel.iDisplayLength).ToList();
                 }
 
-                var sessionObject = _storage.GetDatatableProperties<Person>(jQueryDataTablesModel.datatableId);
-                var parser = new DatatableParser<Person>(result, sessionObject);
+                var storageObject = jQueryDataTablesModel.columnInfos.DeSerialize<Person>();
+                var parser = new DatatableParser<Person>(result, storageObject);
                 return Json(parser.Parse(jQueryDataTablesModel, personList.Count, result.Count));
 
             }
-            catch
+            catch(Exception ex)
             {
                 // ignored
             }

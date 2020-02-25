@@ -11,7 +11,7 @@ namespace AspCoreDataTable.General
     /// </summary>
     public class JQueryDataTablesModel
     {
-
+        public string columnInfos { get; set; }
         public string datatableId { get; set; }
 
         /// <summary>

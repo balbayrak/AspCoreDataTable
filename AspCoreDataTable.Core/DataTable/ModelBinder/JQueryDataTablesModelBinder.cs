@@ -1,5 +1,8 @@
-﻿using AspCoreDataTable.General;
+﻿using AspCoreDataTable.Core.DataTable.Storage;
+using AspCoreDataTable.Core.General;
+using AspCoreDataTable.General;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +15,6 @@ namespace AspCoreDataTable.Core.DataTable.ModelBinder
         #region Private Variables (Request Keys)
 
         private const string datatableId_Key = "datatableId";
-        private const string datatableUniqueId_Key = "datatableUniqueId";
         private const string iDisplayStartKey = "iDisplayStart";
         private const string iDisplayLengthKey = "iDisplayLength";
         private const string iColumnsKey = "iColumns";
@@ -51,7 +53,7 @@ namespace AspCoreDataTable.Core.DataTable.ModelBinder
                 // No need to use a prefix since data tables will not prefix the request names        
                 var valueResult = _bindingContext.ValueProvider.GetValue(newKey);
 
-                if (valueResult == null)
+                if (valueResult == null || (valueResult != null && valueResult.FirstValue == null))
                 {
                     // If valueResult is still null then we know the value is not in the ModelBindingContext
                     // cease execution of this forloop
@@ -78,7 +80,7 @@ namespace AspCoreDataTable.Core.DataTable.ModelBinder
 
                 var valueResult = _bindingContext.ValueProvider.GetValue(newKey);
 
-                if (valueResult == null)
+                if (valueResult == null || (valueResult != null && valueResult.FirstValue == null))
                 {
                     // If valueResult is still null then we know the value is not in the ModelBindingContext
                     // cease execution of this forloop
@@ -179,6 +181,10 @@ namespace AspCoreDataTable.Core.DataTable.ModelBinder
                         dataTablesRequest.sSortDir_.Count, dataTablesRequest.iSortingCols.Value));
                 }
             }
+            var value = GetString("columnInfo");
+
+            dataTablesRequest.columnInfos = value;
+
             dataTablesRequest.sSearch = GetString(sSearchKey);
             dataTablesRequest.sSearch_ = GetStringList(sSearch_Key);
             dataTablesRequest.mDataProp_ = GetStringList(mDataProp_Key);

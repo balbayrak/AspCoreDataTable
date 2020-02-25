@@ -31,6 +31,78 @@
                             .Modal(EnumModalSize.Large)
                             .BackDropStatic()
                             .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
 
 
                       action.ConfirmButton(string.Empty)
@@ -63,12 +135,262 @@
 
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        @(Html.DataTableHelper<Person>()
+              .Columns(column =>
+              {
+                  column.CheckColumn(p => p.id).CheckAllEnabled();
+                  column.BoundColumn(p => p.id).Title("ID").IsPrimaryKey(true);
+                  column.BoundColumn(p => p.name).Title("Name").Searchable(Operation.StartsWith);
+                  column.BoundColumn(p => p.surname).Title("Surname").Searchable(Operation.StartsWith);
+                  column.ActionColumn().Title("Actions").Actions(action =>
+                  {
+                      action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+
+
+                      action.ConfirmButton(string.Empty)
+                            .Text("Delete")
+                            .CssClass("btn btn-sm red btn-outline filter-submit margin-bottom red-haze")
+                            .IClass("fa fa-trash-o")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/Delete", methodType = EnumHttpMethod.POST })
+                            .BlockUI()
+                            .ConfirmOption(new ConfirmOption("test", "Sil", ""))
+                            .ToHtml();
+
+                  });
+              })
+             .ToolBarActions(action =>
+             {
+                 action.ModalActionButton(string.Empty)
+                       .FormSide(EnumFormSide.LetfSide)
+                       .Text("Add New Person")
+                       .Modal(EnumModalSize.Default)
+                       .BackDropStatic()
+                       .CssClass("btn btn-sm red btn-outline filter-submit margin-bottom red-haze")
+                       .IClass("fa fa-plus")
+                       .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit/-1", methodType = EnumHttpMethod.GET })
+                       .BlockUI()
+                       .ToHtml();
+             },
+            new TableExportSetting("Tools", "btn red btn-outline", false, true, true, true, EnumFormSide.RightSide))
+             .Portlet("Person Table", System.Drawing.Color.Red, "fa fa-cogs")
+             .ToHtml("persontable1", "/Home/LoadTable", "table table-striped table-hover table-bordered  dataTable no-footer", true))
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @(Html.DataTableHelper<Person>()
+              .Columns(column =>
+              {
+                  column.CheckColumn(p => p.id).CheckAllEnabled();
+                  column.BoundColumn(p => p.id).Title("ID").IsPrimaryKey(true);
+                  column.BoundColumn(p => p.name).Title("Name").Searchable(Operation.StartsWith);
+                  column.BoundColumn(p => p.surname).Title("Surname").Searchable(Operation.StartsWith);
+                  column.ActionColumn().Title("Actions").Actions(action =>
+                  {
+                      action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+                       action.ModalButton(string.Empty)
+                            .Text("Edit")
+                            .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                            .IClass("fa fa-edit")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                            .BlockUI()
+                            .Modal(EnumModalSize.Large)
+                            .BackDropStatic()
+                            .ToHtml();
+
+
+                      action.ConfirmButton(string.Empty)
+                            .Text("Delete")
+                            .CssClass("btn btn-sm red btn-outline filter-submit margin-bottom red-haze")
+                            .IClass("fa fa-trash-o")
+                            .ActionInfo(new ActionInfo { actionUrl = "/Home/Delete", methodType = EnumHttpMethod.POST })
+                            .BlockUI()
+                            .ConfirmOption(new ConfirmOption("test", "Sil", ""))
+                            .ToHtml();
+
+                  });
+              })
+             .ToolBarActions(action =>
+             {
+                 action.ModalActionButton(string.Empty)
+                       .FormSide(EnumFormSide.LetfSide)
+                       .Text("Add New Person")
+                       .Modal(EnumModalSize.Default)
+                       .BackDropStatic()
+                       .CssClass("btn btn-sm red btn-outline filter-submit margin-bottom red-haze")
+                       .IClass("fa fa-plus")
+                       .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit/-1", methodType = EnumHttpMethod.GET })
+                       .BlockUI()
+                       .ToHtml();
+             },
+            new TableExportSetting("Tools", "btn red btn-outline", false, true, true, true, EnumFormSide.RightSide))
+             .Portlet("Person Table", System.Drawing.Color.Red, "fa fa-cogs")
+             .ToHtml("persontable2", "/Home/LoadTable", "table table-striped table-hover table-bordered  dataTable no-footer", true))
+
+    </div>
+</div>
 
 @section Scripts
 {
     <script>
         $(document).ready(function () {
             var persontable = DataTableFunc.initDataTable('persontable');
+            var persontable1 = DataTableFunc.initDataTable('persontable1');
+             var persontable2 = DataTableFunc.initDataTable('persontable2');
         });
     </script>
 }

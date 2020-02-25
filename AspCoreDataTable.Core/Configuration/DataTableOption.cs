@@ -8,8 +8,6 @@ namespace AspCoreDataTable.Core.Configuration
 {
     public class DataTableOption
     {
-        public EnumStorage storageType { get; set; }
-
         public ConfirmType confirmType { get; set; }
     }
 }

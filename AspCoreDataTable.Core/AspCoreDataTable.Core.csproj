@@ -7,10 +7,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AspCoreDependency\AspCoreDependency.Core\AspCoreDependency.Core.csproj" />
+    <Reference Include="AspCoreDependency.Core">
+      <HintPath>..\..\AspCoreDependency\AspCoreDependency.Core\bin\Debug\netcoreapp3.0\AspCoreDependency.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

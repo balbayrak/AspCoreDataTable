@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AspCoreDataTable.Core.Configuration;
 using AspCoreDataTable.Core.ConfirmBuilder;
 using AspCoreDataTable.Core.General.Enums;
@@ -33,7 +29,6 @@ namespace AspCoreDataTable.Test
 
             services.AddDataTable(option =>
             {
-                option.storageType = EnumStorage.Cookie;
                 option.confirmType = ConfirmType.BootBox;
             });
 

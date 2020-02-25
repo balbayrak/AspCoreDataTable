@@ -6,10 +6,10 @@ using AspCoreDataTable.Core.DataTable.Toolbar.Buttons;
 using AspCoreDataTable.Core.Extensions;
 using AspCoreDataTable.Core.General;
 using AspCoreDataTable.Core.General.Portlet;
-using AspCoreDataTable.Core.Storage;
 using AspCoreDependency.Core.Concrete;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,7 +19,6 @@ namespace AspCoreDataTable.Core.DataTable
 {
     public class TableBuilder<TModel> : ITableBuilder<TModel> where TModel : class
     {
-        private IStorage _storage;
         private TableToolBar TableToolBarActions { get; set; }
         private PortletForm TablePortletSetting { get; set; }
 
@@ -27,8 +26,6 @@ namespace AspCoreDataTable.Core.DataTable
 
         public TableBuilder()
         {
-            _storage = DependencyResolver.Current.GetService<IStorage>();
-
             this.TableColumns = new List<ITableColumnInternal>();
             this.TableToolBarActions = new TableToolBar();
         }
@@ -55,16 +52,18 @@ namespace AspCoreDataTable.Core.DataTable
             table.Attributes.Add(HelperConstant.General.DATA_COMPONENT_UNIQUE_ID, uniqueId.ToString());
 
             //Localization
-            table.Attributes.Add(HelperConstant.DataTable.DATA_SEMPTYTABLE, "Tabloda herhangi bir veri mevcut değil");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_SINFO, "_MAX_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_SINFOEMPTY, "");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_SLOADINGRECORDS, "Yükleniyor...");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_SPROCESSING, "Yükleniyor...");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH, "Ara:");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SFIRST, "İlk");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SLAST, "Son");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SNEXT, "Sonraki");
-            table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SPREVIOUS, "Önceki");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_SEMPTYTABLE, "Tabloda herhangi bir veri mevcut değil");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_SINFO, "_MAX_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_SINFOEMPTY, "");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_SLOADINGRECORDS, "Yükleniyor...");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_SPROCESSING, "Yükleniyor...");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH, "Ara:");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SFIRST, "İlk");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SLAST, "Son");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SNEXT, "Sonraki");
+            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SPREVIOUS, "Önceki");
+
+
             table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH_ENABLED, isSearchEnabled.ToString());
 
 
@@ -105,14 +104,17 @@ namespace AspCoreDataTable.Core.DataTable
                         tr.InnerHtml.Append(tc.HtmlColumn());
                     }
 
-                    datatableSessionObject.DatatableProperties.Add(new DatatableBoundColumn<TModel>
+                    var bcolumn = new DatatableBoundColumn<TModel>
                     {
                         columnIsPrimaryKey = boundColumn.columnIsPrimaryKey,
                         columnProperty = boundColumn.columnProperty,
                         column_Property_Exp = boundColumn.columnPropertyExp,
                         orderByDirection = boundColumn.orderByDirection,
                         searchable = boundColumn.searchable
-                    });
+                    };
+
+
+                    datatableSessionObject.DatatableProperties.Add(bcolumn);
                 }
                 else if (tc is ITableCheckColumnInternal)
                 {
@@ -145,7 +147,8 @@ namespace AspCoreDataTable.Core.DataTable
 
             table.InnerHtml.Append(sb.ToString());
 
-            _storage.AddDatatableProperties(uniqueId.ToString(), datatableSessionObject);
+
+            table.Attributes.Add("data-columninfo", datatableSessionObject.Serialize<TModel>());
 
             string toolbar = string.Empty;
             if (this.TableToolBarActions != null)

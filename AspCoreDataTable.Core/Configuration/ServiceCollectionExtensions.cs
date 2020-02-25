@@ -1,7 +1,6 @@
 ﻿using AspCoreDataTable.Core.ConfirmBuilder;
 using AspCoreDataTable.Core.Extensions;
 using AspCoreDataTable.Core.General.Enums;
-using AspCoreDataTable.Core.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -35,15 +34,6 @@ namespace AspCoreDataTable.Core.Configuration
                 {
                     services.AddSingleton<IConfirmService, SweetConfirmManager>();
                 }
-
-                if (dataTableOption.storageType == EnumStorage.Cookie)
-                {
-                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-                    services.AddSingleton<IStorage, CookieStorage>();
-                }
-
-                HttpContextWrapper.Configure(services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());
 
             }
             return services;
