@@ -18,10 +18,4 @@
     <ProjectReference Include="..\AspCoreDataTable.Core\AspCoreDataTable.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="AspCoreDependency.Core">
-      <HintPath>..\..\AspCoreDependency\AspCoreDependency.Core\bin\Debug\netcoreapp3.0\AspCoreDependency.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

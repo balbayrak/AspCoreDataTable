@@ -1,8 +1,6 @@
-using AspCoreDataTable.Core.Configuration;
 using AspCoreDataTable.Core.ConfirmBuilder;
-using AspCoreDataTable.Core.General.Enums;
-using AspCoreDependency.Core.Concrete;
-using AspCoreDependency.Core.Configuration;
+using AspCoreDataTable.Core.DataTable.ModelBinder;
+using AspCoreDataTable.Core.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,15 +22,7 @@ namespace AspCoreDataTable.Test
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
-            services.AutoBind();
-
-            services.AddDataTable(option =>
-            {
-                option.confirmType = ConfirmType.BootBox;
-            });
-
-            DependencyResolver.Init(BuildServices(services));
+            services.AddDataTableProvider();
         }
 
         private ServiceProvider BuildServices(IServiceCollection services)

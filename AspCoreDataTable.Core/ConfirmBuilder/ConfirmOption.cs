@@ -1,5 +1,4 @@
 ﻿using AspCoreDataTable.Core.Button.Concrete;
-using AspCoreDependency.Core.Concrete;
 
 namespace AspCoreDataTable.Core.ConfirmBuilder
 {

@@ -10,10 +10,4 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="AspCoreDependency.Core">
-      <HintPath>RequiredFiles\AspCoreDependency.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
