@@ -4,8 +4,8 @@
 
         $("body").delegate(submitClass, "click", function (e) {
             e.preventDefault();
-            Entity.AddOrEdit(entity, formid, tableid, successTitle, successMessage, errorTitle, errorMessage);
-            if (submitClass != '.entitysubmit') {
+            var value = Entity.AddOrEdit(entity, formid, tableid, successTitle, successMessage, errorTitle, errorMessage);
+            if (value == true) {
                 var $btn = $(this);
                 var $modal = $btn.closest('div.custommodal');
                 if ($modal) {
@@ -41,7 +41,7 @@
                             var table = $('#' + tableid);
                             var dt = table.DataTable();
                             dt.ajax.reload();
-                           // Alert.showAlert("success", successTitle, successMessage, AlertTypeEnum.Sweet);
+                            Alert.showAlert("success", successTitle, successMessage, AlertTypeEnum.Sweet);
                         }
                         else {
                             window.location.href = "/" + entity + "/Index";
