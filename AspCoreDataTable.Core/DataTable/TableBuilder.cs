@@ -49,19 +49,6 @@ namespace AspCoreDataTable.Core.DataTable
 
             table.Attributes.Add(HelperConstant.General.DATA_COMPONENT_UNIQUE_ID, uniqueId.ToString());
 
-            //Localization
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_SEMPTYTABLE, "Tabloda herhangi bir veri mevcut değil");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_SINFO, "_MAX_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_SINFOEMPTY, "");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_SLOADINGRECORDS, "Yükleniyor...");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_SPROCESSING, "Yükleniyor...");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH, "Ara:");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SFIRST, "İlk");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SLAST, "Son");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SNEXT, "Sonraki");
-            //table.Attributes.Add(HelperConstant.DataTable.DATA_OPAGINATE_SPREVIOUS, "Önceki");
-
-
             table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH_ENABLED, isSearchEnabled.ToString());
 
 
@@ -83,8 +70,8 @@ namespace AspCoreDataTable.Core.DataTable
 
             StringBuilder sb = new StringBuilder();
 
-            DatatableStorageObject<TModel> datatableSessionObject = new DatatableStorageObject<TModel>();
-            datatableSessionObject.DatatableProperties = new List<DatatableBoundColumn<TModel>>();
+            DatatableStorageObject<TModel> datatableStorageObject = new DatatableStorageObject<TModel>();
+            datatableStorageObject.DatatableProperties = new List<DatatableBoundColumn<TModel>>();
 
             int indexCounter = 1;
             string modals = string.Empty;
@@ -112,7 +99,7 @@ namespace AspCoreDataTable.Core.DataTable
                     };
 
 
-                    datatableSessionObject.DatatableProperties.Add(bcolumn);
+                    datatableStorageObject.DatatableProperties.Add(bcolumn);
                 }
                 else if (tc is ITableCheckColumnInternal)
                 {
@@ -120,8 +107,8 @@ namespace AspCoreDataTable.Core.DataTable
                     checkColumn.actionColumnIndex = indexCounter++;
                     tr.InnerHtml.Append(tc.HtmlColumn());
 
-                    datatableSessionObject.DatatableActions = datatableSessionObject.DatatableActions ?? new List<DatatableActionColumn>();
-                    datatableSessionObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = checkColumn.checkActionHtml, ActionColumnHeader = checkColumn.columnDataProperty });
+                    datatableStorageObject.DatatableActions = datatableStorageObject.DatatableActions ?? new List<DatatableActionColumn>();
+                    datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = checkColumn.checkActionHtml, ActionColumnHeader = checkColumn.columnDataProperty });
                 }
                 else
                 {
@@ -134,8 +121,8 @@ namespace AspCoreDataTable.Core.DataTable
                         modals += act.columnActionsModalHtml;
                     }
 
-                    datatableSessionObject.DatatableActions = datatableSessionObject.DatatableActions ?? new List<DatatableActionColumn>();
-                    datatableSessionObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = act.columnActionsHtml, ActionColumnHeader = act.columnDataProperty });
+                    datatableStorageObject.DatatableActions = datatableStorageObject.DatatableActions ?? new List<DatatableActionColumn>();
+                    datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = act.columnActionsHtml, ActionColumnHeader = act.columnDataProperty });
                 }
             }
 
@@ -146,8 +133,8 @@ namespace AspCoreDataTable.Core.DataTable
             table.InnerHtml.Append(sb.ToString());
 
 
-            table.Attributes.Add("data-columninfo", datatableSessionObject.Serialize<TModel>());
-
+            table.Attributes.Add(HelperConstant.DataTable.DATA_COLUMN_INFO, datatableStorageObject.Serialize());
+            datatableStorageObject = null;
             string toolbar = string.Empty;
             if (this.TableToolBarActions != null)
             {

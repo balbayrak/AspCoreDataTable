@@ -1,36 +1,67 @@
-﻿
-@{
-    Layout = null;
-}
+﻿@model AspCoreDataTable.Test.Models.Person;
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en" class="no-js">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>AddOrEdit</title>
 </head>
-<body>
 
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <div class="text-center">
-        <h2 class="display-4">AddorEdit Content here...</h2>
+<body>
+    <div class="modal-header">
+        <h3 class="page-title">
+            Person
+            <small>
+                Person Add or Edit
+            </small>
+        </h3>
     </div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <div class="text-right" style="padding-right:10px">
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-bordered" id="formPerson" method="post">
+            @Html.ValidationSummary(false)
+            @Html.AntiForgeryToken()
+
+
+            <input type="hidden" id="id" name="id" value="@if ( Model != null)
+    { @Html.Raw(Model.id) }" />
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Name</label>
+                    <div class="col-md-6">
+                        <input asp-for="name" id="name" class="form-control validate[required]" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Surname</label>
+                    <div class="col-md-6">
+                        <input asp-for="surname" id="surname" class="form-control validate[required]" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-3">City</label>
+                    <div class="col-md-6">
+                        <input asp-for="PersonAdress.city" id="personCity" class="form-control validate[required]" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Country</label>
+                    <div class="col-md-6">
+                        <input asp-for="PersonAdress.country" id="personCountry" class="form-control validate[required]" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button data-blockui="false"  type="submit" form="formPerson"  class="btn btn-success start entitysubmit">Save</button>
     </div>
-    <br />
-    <br />
 </body>
 </html>

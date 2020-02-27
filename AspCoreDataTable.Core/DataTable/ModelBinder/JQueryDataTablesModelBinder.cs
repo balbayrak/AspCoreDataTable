@@ -29,6 +29,7 @@ namespace AspCoreDataTable.Core.DataTable.ModelBinder
         private const string sSortDir_Key = "sSortDir_";
         private const string sEchoKey = "sEcho";
         private const string mDataProp_Key = "mDataProp_";
+        private const string columnInfo_Key = "columnInfo";
 
         private ModelBindingContext _bindingContext;
 
@@ -181,7 +182,7 @@ namespace AspCoreDataTable.Core.DataTable.ModelBinder
                         dataTablesRequest.sSortDir_.Count, dataTablesRequest.iSortingCols.Value));
                 }
             }
-            var value = GetString("columnInfo");
+            var value = GetString(columnInfo_Key);
 
             dataTablesRequest.columnInfos = value;
 

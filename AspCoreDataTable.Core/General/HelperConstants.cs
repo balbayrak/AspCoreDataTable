@@ -101,9 +101,8 @@ namespace AspCoreDataTable.Core.General
 
             public static readonly string DATA_SSEARCH_ENABLED = "data-ssearch-enabled";
 
-            public static readonly string DATA_TABLE_COOKIE_KEY = "DTC";
+            public static readonly string DATA_COLUMN_INFO = "data-columninfo";
 
-            public const string CUSTOM_TOKEN_STORAGE_KEY = "CT_A1CC32F1-73A3-47B4-A1D8-7599C8D69BC9";
         }
         public struct TreeView
         {

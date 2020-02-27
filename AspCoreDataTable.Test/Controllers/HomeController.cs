@@ -13,21 +13,7 @@ namespace AspCoreDataTable.Test.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
-        {
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public JsonResult LoadTable(JQueryDataTablesModel jQueryDataTablesModel)
-        {
-            try
-            {
-                List<Person> personList = new List<Person>
+        public static List<Person> personList = new List<Person>
                 {
                     new Person() {
                         id = Guid.NewGuid(),name="Linda",surname="Estrada",
@@ -62,14 +48,27 @@ namespace AspCoreDataTable.Test.Controllers
                             city="paris",
                             country="fransa"
                         }},
-                    new Person() {id = Guid.NewGuid(),name="ahmet",surname="bolat",
+                    new Person() {id = Guid.NewGuid(),name="John",surname="Kerr",
                      PersonAdress = new PersonAdress
                      {
                             city="brüksel",
                             country="belçika"
                         }}
                 };
+        public HomeController()
+        {
+        }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult LoadTable(JQueryDataTablesModel jQueryDataTablesModel)
+        {
+            try
+            {
                 List<Person> result = null;
 
                 if (!string.IsNullOrEmpty(jQueryDataTablesModel.sSearch))
@@ -86,7 +85,7 @@ namespace AspCoreDataTable.Test.Controllers
                 return Json(parser.Parse(jQueryDataTablesModel, personList.Count, result.Count));
 
             }
-            catch(Exception ex)
+            catch
             {
                 // ignored
             }
@@ -97,7 +96,7 @@ namespace AspCoreDataTable.Test.Controllers
 
 
         [HttpPost]
-        public JsonResult LoadTable2([ModelBinder(binderType: typeof(JQueryDataTablesModelBinder))] JQueryDataTablesModel jQueryDataTablesModel)
+        public JsonResult LoadTable2([JQueryDataTablesModelBinder] JQueryDataTablesModel jQueryDataTablesModel)
         {
             try
             {
@@ -173,7 +172,36 @@ namespace AspCoreDataTable.Test.Controllers
         [HttpGet]
         public IActionResult AddOrEdit(string id)
         {
-            return View("AddOrEdit");
+            Person person = null;
+            if (id != "-1")
+            {
+                Guid Uid = new Guid(id);
+                person = personList.FirstOrDefault(t => t.id == Uid);
+            }
+            return PartialView("AddOrEdit", person);
+        }
+
+        [HttpPost]
+        public string AddOrEdit(Person person)
+        {
+            AjaxResult result = new AjaxResult();
+
+            Person per = personList.FirstOrDefault(t => t.id == person.id);
+            if(per == null)
+            {
+                person.id = Guid.NewGuid();
+                personList.Add(person);
+            }
+            else
+            {
+                per.name = person.name;
+                per.surname = person.surname;
+                per.PersonAdress.city = person.PersonAdress.city;
+                per.PersonAdress.country = person.PersonAdress.country;
+            }
+           
+            result.Result = 1;
+            return JsonConvert.SerializeObject(result);
         }
     }
 }
