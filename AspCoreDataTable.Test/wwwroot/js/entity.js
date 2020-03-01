@@ -4,15 +4,8 @@
 
         $("body").delegate(submitClass, "click", function (e) {
             e.preventDefault();
-            var value = Entity.AddOrEdit(entity, formid, tableid, successTitle, successMessage, errorTitle, errorMessage);
-            if (value == true) {
-                var $btn = $(this);
-                var $modal = $btn.closest('div.custommodal');
-                if ($modal) {
-                    $modal.removeClass("in");
-                    $modal.modal('hide');
-                }
-            }
+            var $btn = $(this);
+            Entity.AddOrEdit($btn, entity, formid, tableid, successTitle, successMessage, errorTitle, errorMessage);
         });
 
         var entitydt = DataTableFunc.initDataTable(tableid);
@@ -23,7 +16,7 @@
         }
         return true;
     },
-    AddOrEdit: function (entity, formid, tableid = null, successTitle = null, successMessage = null, errorTitle = null, errorMessage = null) {
+    AddOrEdit: function (btnRef,entity, formid, tableid = null, successTitle = null, successMessage = null, errorTitle = null, errorMessage = null) {
         if (this.Validate(formid)) {
             var formData = new FormData($('#' + formid)[0]);
             $.ajax({
@@ -42,6 +35,7 @@
                             var dt = table.DataTable();
                             dt.ajax.reload();
                             Alert.showAlert("success", successTitle, successMessage, AlertTypeEnum.Sweet);
+                            Modal.CloseModal(btnRef); 
                         }
                         else {
                             window.location.href = "/" + entity + "/Index";
@@ -50,12 +44,21 @@
                     else {
                         if (tableid != null && errorMessage != null && errorTitle != null) {
                             Alert.showAlert("error", errorTitle, errorMessage, AlertTypeEnum.Sweet);
+                            Modal.CloseModal(btnRef);
                         }
                     }
                 }
             });
         }
-        else
-            return false;
+    }
+}
+var Modal =
+{
+    CloseModal: function (btn) {
+        var $modal = btn.closest('div.custommodal');
+        if ($modal) {
+            $modal.removeClass("in");
+            $modal.modal('hide');
+        }
     }
 }

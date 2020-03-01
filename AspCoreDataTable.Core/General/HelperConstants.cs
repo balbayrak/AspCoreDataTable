@@ -103,6 +103,8 @@ namespace AspCoreDataTable.Core.General
 
             public static readonly string DATA_COLUMN_INFO = "data-columninfo";
 
+            public static readonly string DATA_PAGING_TYPE = "data-paging-type";
+
         }
         public struct TreeView
         {

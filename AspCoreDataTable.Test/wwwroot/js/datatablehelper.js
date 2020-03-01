@@ -40,18 +40,11 @@ var DataTableFunc = {
             aoColumns.push({ 'mDataProp': prop, "bSortable": sortable, "sWidth": widthstr });
         }
 
-        //var semptytable = $(item).data('semptytable');
-        //var sInfo = $(item).data('sinfo');
-        //var sInfoEmpty = $(item).data('sinfoempty');
-        //var sLoadingRecords = $(item).data('sloadingrecords');
-        //var sProcessing = $(item).data('sprocessing');
-        //var sSearch = $(item).data('ssearch');
-        //var sFirst = $(item).data('sfirst');
-        //var sLast = $(item).data('slast');
-        //var sNext = $(item).data('snext');
-        //var sPrevious = $(item).data('sprevious');
+
         var ssearchenabled = false;
         var ssearchenabledstr = $(item).data('ssearch-enabled');
+
+        var pagingtype = $(item).data('paging-type');
 
         var columnInfo = $(item).data('columninfo');
 
@@ -65,6 +58,8 @@ var DataTableFunc = {
             "lengthMenu": [[5, 10, 15], [5, 10, 15]],
             "pageLength": 5,
             "searching": ssearchenabled,
+            "stateSave": true,
+            "pagingType": pagingtype,
             "retrieve": true,
             "bProcessing": true,
             "bServerSide": true,
