@@ -21,7 +21,7 @@ var DataTableFunc = {
         var orderColumns = new Array();
         var headers = $(item).find('th');
 
-        var autowidth=false;
+        var autowidth = false;
         for (var j = 0; j < headers.length; j++) {
             var prop = $(headers[j]).data('property');
 
@@ -52,7 +52,7 @@ var DataTableFunc = {
         var columnInfo = $(item).data('columninfo');
 
         if (typeof ssearchenabledstr !== 'undefined') {
-            if (ssearchenabledstr!==null&&ssearchenabledstr.toLowerCase() === "true")
+            if (ssearchenabledstr !== null && ssearchenabledstr.toLowerCase() === "true")
                 ssearchenabled = true;
         }
         var tablebuttons = DataTableFunc.tableToolbarInit($(item));
@@ -70,7 +70,6 @@ var DataTableFunc = {
             "sServerMethod": "POST",
             "bAutoWidth": autowidth,
             "bPaginate": true,
-            //"bSort": false,
             "order": orderColumns,
             "oLanguage": {
                 "sDecimal": ",",

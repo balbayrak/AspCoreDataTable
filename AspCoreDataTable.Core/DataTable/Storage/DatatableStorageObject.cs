@@ -13,7 +13,6 @@ namespace AspCoreDataTable.Core.DataTable.Storage
 
         public List<DatatableActionColumn> DatatableActions { get; set; }
 
-
         #endregion
     }
 }

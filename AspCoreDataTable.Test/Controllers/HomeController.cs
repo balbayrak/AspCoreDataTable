@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace AspCoreDataTable.Test.Controllers
 {
@@ -69,21 +70,7 @@ namespace AspCoreDataTable.Test.Controllers
         {
             try
             {
-                List<Person> result = null;
-
-                if (!string.IsNullOrEmpty(jQueryDataTablesModel.sSearch))
-                {
-                    result = personList.Where(t => t.name.ToLower().StartsWith(jQueryDataTablesModel.sSearch.ToLower()) || t.surname.ToLower().StartsWith(jQueryDataTablesModel.sSearch.ToLower())).Skip(jQueryDataTablesModel.iDisplayStart).Take(jQueryDataTablesModel.iDisplayLength).ToList();
-                }
-                else
-                {
-                    result = personList.Skip(jQueryDataTablesModel.iDisplayStart).Take(jQueryDataTablesModel.iDisplayLength).ToList();
-                }
-
-                var storageObject = jQueryDataTablesModel.columnInfos.DeSerialize<Person>();
-                var parser = new DatatableParser<Person>(result, storageObject);
-                return Json(parser.Parse(jQueryDataTablesModel, personList.Count, result.Count));
-
+                return Json(jQueryDataTablesModel.ToJqueryDataTablesResponse(personList));
             }
             catch
             {
@@ -94,80 +81,20 @@ namespace AspCoreDataTable.Test.Controllers
 
         }
 
-
         [HttpPost]
         public JsonResult LoadTable2([JQueryDataTablesModelBinder] JQueryDataTablesModel jQueryDataTablesModel)
         {
             try
             {
-                List<Person> personList = new List<Person>
-                {
-                    new Person() {
-                        id = Guid.NewGuid(),name="Linda",surname="Estrada",
-                        PersonAdress = new PersonAdress
-                        {
-                            city="ankara",
-                            country="Turkey"
-                        }
-
-                    },
-                    new Person() {id = Guid.NewGuid(),name="George",surname="Davis",
-                     PersonAdress = new PersonAdress
-                        {
-                            city="istanbul",
-                            country="Turkey"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="Marilyn",surname="Shaw",
-                      PersonAdress = new PersonAdress
-                        {
-                            city="berlin",
-                            country="almanya"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="Terry",surname="Perez",
-                     PersonAdress = new PersonAdress
-                        {
-                            city="liverpool",
-                            country="ingiltere"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="Henry",surname="Freeman",
-                     PersonAdress = new PersonAdress
-                     {
-                            city="paris",
-                            country="fransa"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="ahmet",surname="bolat",
-                     PersonAdress = new PersonAdress
-                     {
-                            city="brüksel",
-                            country="belçika"
-                        }}
-                };
-
-                List<Person> result = null;
-
-                if (!string.IsNullOrEmpty(jQueryDataTablesModel.sSearch))
-                {
-                    result = personList.Where(t => t.name.StartsWith(jQueryDataTablesModel.sSearch) || t.surname.StartsWith(jQueryDataTablesModel.sSearch)).Skip(jQueryDataTablesModel.iDisplayStart).Take(jQueryDataTablesModel.iDisplayLength).ToList();
-                }
-                else
-                {
-                    result = personList.Skip(jQueryDataTablesModel.iDisplayStart).Take(jQueryDataTablesModel.iDisplayLength).ToList();
-                }
-
-                var storageObject = jQueryDataTablesModel.columnInfos.DeSerialize<Person>();
-                var parser = new DatatableParser<Person>(result, storageObject);
-                return Json(parser.Parse(jQueryDataTablesModel, personList.Count, result.Count));
-
+                return Json(jQueryDataTablesModel.ToJqueryDataTablesResponse(personList));
             }
-            catch (Exception ex)
+            catch
             {
                 // ignored
             }
 
             return null;
-
         }
-
 
         [HttpGet]
         public IActionResult AddOrEdit(string id)
@@ -188,7 +115,7 @@ namespace AspCoreDataTable.Test.Controllers
             AjaxResult result = new AjaxResult();
 
             Person per = personList.FirstOrDefault(t => t.id == person.id);
-            if(per == null)
+            if (per == null)
             {
                 personList.Add(person);
                 result.ResultText = "Person Added";

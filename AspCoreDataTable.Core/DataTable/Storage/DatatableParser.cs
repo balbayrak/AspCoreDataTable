@@ -5,13 +5,12 @@ using System.Linq;
 
 namespace AspCoreDataTable.Core.DataTable.Storage
 {
-    public class DatatableParser<TEntity>
+    public class DatatableParser<TEntity> : IDisposable
     where TEntity : class
     {
         #region Fields
 
-
-        private readonly DatatableStorageObject<TEntity> _sessionObject;
+        private DatatableStorageObject<TEntity> _storageObject;
 
         private List<TEntity> _entities;
 
@@ -19,10 +18,16 @@ namespace AspCoreDataTable.Core.DataTable.Storage
 
         #region Constructors and Destructors
 
-        public DatatableParser(List<TEntity> entities, DatatableStorageObject<TEntity> sessionObject)
+        public DatatableParser(List<TEntity> entities, DatatableStorageObject<TEntity> storageObject)
         {
             _entities = entities;
-            _sessionObject = sessionObject;
+            _storageObject = storageObject;
+        }
+
+        public void Dispose()
+        {
+            _storageObject = null;
+            _entities = null;
         }
 
         #endregion
@@ -37,8 +42,8 @@ namespace AspCoreDataTable.Core.DataTable.Storage
 
             var provider = new DatatableEntityProvider<TEntity>(_entities);
 
-            var reply = new JQueryDataTablesResponse(provider.Provide(_sessionObject).ToArray(), totalRecords, totalRecords, Convert.ToInt32(param.sEcho));
-      
+            var reply = new JQueryDataTablesResponse(provider.Provide(_storageObject).ToArray(), totalRecords, totalRecords, Convert.ToInt32(param.sEcho));
+
             return reply;
         }
 

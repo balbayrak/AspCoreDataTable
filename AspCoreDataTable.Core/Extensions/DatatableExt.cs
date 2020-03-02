@@ -1,11 +1,16 @@
 ﻿using AspCoreDataTable.Core.DataTable.Storage;
 using AspCoreDataTable.Core.General;
+using AspCoreDataTable.Core.General.Enums;
+using AspCoreDataTable.General;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace AspCoreDataTable.Core.Extensions
 {
-    public static class DatatableStorageExt
+    public static class DatatableExt
     {
         public static string Serialize<TEntity>(this DatatableStorageObject<TEntity> storageObject) where TEntity : class
         {
@@ -90,7 +95,7 @@ namespace AspCoreDataTable.Core.Extensions
             encryptionDict.Add("Actions_", "ée5");
             encryptionDict.Add("btn-blockui-modal", "ée6");
 
-          
+
             foreach (var key in encryptionDict.Keys)
             {
                 if (isEncrpytion)
@@ -102,5 +107,50 @@ namespace AspCoreDataTable.Core.Extensions
             return compressedString;
         }
 
+        public static Expression<Func<TEntity, bool>> GetSearchExpression<TEntity>(this DatatableStorageObject<TEntity> storageObject, string searchValue) where TEntity : class
+        {
+            Expression<Func<TEntity, bool>> expression = null;
+            var list = storageObject.DatatableProperties.Where(t => t.searchable != null);
+            List<SearchInfo> searchInfos = null;
+
+            foreach (var item in list)
+            {
+                searchInfos = searchInfos ?? new List<SearchInfo>();
+                var propertyName = item.column_Property_Exp.Substring(item.column_Property_Exp.IndexOf('.') + 1);
+                searchInfos.Add(new SearchInfo
+                {
+                    operation = (Operation)Convert.ToInt32(item.searchable),
+                    propertyName = propertyName
+                });
+            }
+
+            if (searchInfos != null && searchInfos.Count > 0)
+            {
+                expression = ExpressionBuilder.GetSearchExpression<TEntity>(searchInfos, searchValue);
+            }
+            searchInfos = null;
+            return expression;
+        }
+
+        public static JQueryDataTablesResponse ToJqueryDataTablesResponse<TEntity>(this JQueryDataTablesModel model, IEnumerable<TEntity> collection)
+            where TEntity : class
+        {
+            List<TEntity> result = null;
+            var storageObject = model.columnInfos.DeSerialize<TEntity>();
+            if (!string.IsNullOrEmpty(model.sSearch))
+            {
+                Expression<Func<TEntity, bool>> expression = storageObject.GetSearchExpression(model.sSearch.Trim());
+                result = collection.AsQueryable().Where(expression).Skip(model.iDisplayStart).Take(model.iDisplayLength).ToList();
+            }
+            else
+            {
+                result = collection.Skip(model.iDisplayStart).Take(model.iDisplayLength).ToList();
+            }
+
+            using (var parser = new DatatableParser<TEntity>(result, storageObject))
+            {
+                return parser.Parse(model, collection.Count(), result.Count);
+            }
+        }
     }
 }
