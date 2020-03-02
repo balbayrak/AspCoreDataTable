@@ -29,7 +29,7 @@
         successTitle = null,
         errorMessage = null) {
         if (this.Validate(formid)) {
-            var formData = new FormData($('#' + formid)[0]);
+            var formData = new FormData($('#' + formid)[$('#formPerson').length -1]);
             $.ajax({
                 url: "/" + entity + "/AddOrEdit",
                 type: "POST",
