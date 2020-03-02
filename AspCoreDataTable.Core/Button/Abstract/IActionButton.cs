@@ -10,7 +10,6 @@ namespace AspCoreDataTable.Core.Button.Abstract
         T CssClass(string cssClass);
         T IClass(string iclass);
         T BlockUI(string blocktarget = null);
-        IHtmlContent ToHtml();
     }
 
 }

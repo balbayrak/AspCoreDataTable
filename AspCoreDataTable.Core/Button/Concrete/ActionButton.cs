@@ -5,10 +5,13 @@ using AspCoreDataTable.Core.General;
 using AspCoreDataTable.Core.General.Enums;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
+using System.IO;
+using System.Text.Encodings.Web;
 
 namespace AspCoreDataTable.Core.Button.Concrete
 {
-    public abstract class ActionButton<T> : IActionButtonInternal
+    public abstract class ActionButton<T> : IHtmlContent, IActionButtonInternal
         where T : IActionButton<T>
     {
         protected abstract T _instance { get; }
@@ -46,13 +49,11 @@ namespace AspCoreDataTable.Core.Button.Concrete
             this.text = text;
             return _instance;
         }
-
         public ActionButton(string id)
         {
             this.id = id;
             this.block = new BlockInfo { blockTarget = null, isEnabled = false };
         }
-
         public ActionButton(string id, string text, string iClass, string cssClass,bool blockui, string blockTarget, string actionUrl, EnumHttpMethod httpMethod = EnumHttpMethod.GET) : this(id)
         {
             this.text = text;
@@ -72,7 +73,6 @@ namespace AspCoreDataTable.Core.Button.Concrete
                 this.action.methodType = httpMethod;
             }
         }
-
         protected TagBuilder CreateTagBuilder(string tagName)
         {
             var link = new TagBuilder(tagName);
@@ -135,6 +135,13 @@ namespace AspCoreDataTable.Core.Button.Concrete
         public virtual IHtmlContent ToHtml()
         {
             return new HtmlString(string.Empty);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void WriteTo(TextWriter writer, HtmlEncoder encoder)
+        {
+            writer.Write(this.ToHtml());
+
         }
     }
 }
