@@ -14,6 +14,7 @@ namespace AspCoreDataTable.Core.DataTable.Abstract
         ITableBuilder<TModel> PagingType(EnumPagingType pagingType);
         ITableBuilder<TModel> CssClass(string cssClass);
         ITableBuilder<TModel> Searching(bool searchable);
+        ITableBuilder<TModel> StateSave(bool stateSave);
 
     }
 }

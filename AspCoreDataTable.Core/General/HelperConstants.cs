@@ -105,6 +105,8 @@ namespace AspCoreDataTable.Core.General
 
             public static readonly string DATA_PAGING_TYPE = "data-paging-type";
 
+            public static readonly string DATA_STATE_SAVE = "data-state-save";
+
         }
         public struct TreeView
         {

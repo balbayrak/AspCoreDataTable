@@ -56,7 +56,10 @@
 
             }, new TableExportSetting("Tools", "btn red btn-outline", false, true, true, true, EnumFormSide.RightSide))
             .Portlet("Person Table", System.Drawing.Color.Red, "fa fa-cogs")
-            .CssClass("table table-striped table-hover table-bordered  dataTable no-footer"))
+            .CssClass("table table-striped table-hover table-bordered  dataTable no-footer")
+            .StateSave(true)
+        )
+        
     </div>
 </div>
 

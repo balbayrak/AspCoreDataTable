@@ -46,6 +46,8 @@ var DataTableFunc = {
 
         var pagingtype = $(item).data('paging-type');
 
+        var stateSave = $(item).data('state-save');
+
         var columnInfo = $(item).data('columninfo');
 
         if (typeof ssearchenabledstr !== 'undefined') {
@@ -58,7 +60,7 @@ var DataTableFunc = {
             "lengthMenu": [[5, 10, 15], [5, 10, 15]],
             "pageLength": 5,
             "searching": ssearchenabled,
-            "stateSave": true,
+            "stateSave": stateSave,
             "pagingType": pagingtype,
             "retrieve": true,
             "bProcessing": true,

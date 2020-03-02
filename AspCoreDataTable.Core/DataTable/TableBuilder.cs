@@ -32,6 +32,8 @@ namespace AspCoreDataTable.Core.DataTable
 
         private string _loadActionUrl { get; set; }
 
+        private bool _stateSave { get; set; }
+
         private IList<ITableColumnInternal> _tableColumns { get; set; }
 
         public TableBuilder(string id)
@@ -41,6 +43,7 @@ namespace AspCoreDataTable.Core.DataTable
             this._pagingType = EnumPagingType.bootstrap_number;
             this._id = id;
             this._searchable = true;
+            this._stateSave = false;
         }
 
         public ITableBuilder<TModel> Columns(Action<ColumnBuilder<TModel>> columnBuilder)
@@ -67,6 +70,8 @@ namespace AspCoreDataTable.Core.DataTable
             table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH_ENABLED, _searchable.ToString());
 
             table.Attributes.Add(HelperConstant.DataTable.DATA_PAGING_TYPE, _pagingType.ToString());
+
+            table.Attributes.Add(HelperConstant.DataTable.DATA_STATE_SAVE, _stateSave.ToString());
 
 
             if (!_cssClass.Contains(HelperConstant.CssClassName.DATATABLE_CLASS))
@@ -226,6 +231,12 @@ namespace AspCoreDataTable.Core.DataTable
         public ITableBuilder<TModel> Searching(bool searchable)
         {
             this._searchable = searchable;
+            return this;
+        }
+
+        public ITableBuilder<TModel> StateSave(bool stateSave)
+        {
+            this._stateSave = stateSave;
             return this;
         }
 
