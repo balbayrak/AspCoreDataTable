@@ -133,7 +133,7 @@ var SpinnerButton =
 
             var targeturl = $btn.data('target-url');
 
-            if (targeturl.startsWith("/") == false) {
+            if (targeturl.startsWith("/") === false) {
                 targeturl = "/" + targeturl;
             }
 

@@ -12,7 +12,15 @@ namespace AspCoreDataTable.Test.Models
             this.Result = 0;
             this.ResultText = null;
         }
-        public int Result { get; internal set; }
+        public AjaxResultEnum Result { get; internal set; }
         public string ResultText { get; internal set; }
     }
+
+    public enum AjaxResultEnum
+    {
+        Success = 1,
+        Warning = 2,
+        Error = 0
+    }
+
 }

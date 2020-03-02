@@ -7,8 +7,8 @@
     PaginateFirst: "İlk",
     PaginateLast: "Son",
     PaginateNext: "Sonraki",
-    PaginatePrevious: "Önceki",
-}
+    PaginatePrevious: "Önceki"
+};
 
 
 var DataTableFunc = {
@@ -21,6 +21,7 @@ var DataTableFunc = {
         var orderColumns = new Array();
         var headers = $(item).find('th');
 
+        var autowidth=false;
         for (var j = 0; j < headers.length; j++) {
             var prop = $(headers[j]).data('property');
 
@@ -31,7 +32,7 @@ var DataTableFunc = {
                 sortable = true;
             }
             var widthstr = $(item).data('width');
-            var autowidth = false;
+            autowidth = false;
             if (typeof widthstr !== 'undefined' && widthstr !== '' && widthstr !== null) {
                 widthstr = 'auto';
                 autowidth = true;
@@ -56,7 +57,7 @@ var DataTableFunc = {
         var columnInfo = $(item).data('columninfo');
 
         if (typeof ssearchenabledstr !== 'undefined') {
-            if (ssearchenabledstr.toLowerCase() === "true")
+            if (ssearchenabledstr!==null&&ssearchenabledstr.toLowerCase() === "true")
                 ssearchenabled = true;
         }
         var tablebuttons = DataTableFunc.tableToolbarInit($(item));

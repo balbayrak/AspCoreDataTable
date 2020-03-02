@@ -1,22 +1,23 @@
 var Loader = {
-    loaderStart: function (data) {
+    loaderStart: function(data) {
         // $("#loadSpin").show();
         $(".big-loader").show();
 
         $.blockUI();
-  
+
     },
-    loaderFinish: function () {
+    loaderFinish: function() {
         // $("#loadSpin").hide();
         $(".big-loader").hide();
         $(".tooltipShow").tooltip();
 
         $.unblockUI();
     },
-    AjaxTemplate: '<p class="padding-20"><i class="fa fa-spinner fa-spin"></i> İçerik yüklenirken lütfen bekleyiniz...</p>',
-    AjaxSaveTemplate: '<i class="fa fa-spinner fa-spin"></i> İçerik kaydedilirken lütfen bekleyiniz...',
+    AjaxTemplate:
+        '<p class="padding-20"><i class="fa fa-spinner fa-spin"></i> İçerik yüklenirken lütfen bekleyiniz...</p>',
+    AjaxSaveTemplate: '<i class="fa fa-spinner fa-spin"></i> İçerik kaydedilirken lütfen bekleyiniz...'
 
-}
+};
 
 
 $(window).on('beforeunload', function () {
@@ -42,10 +43,14 @@ $(document).ajaxStart(function (e) {
 
 $(document).ajaxStop(function (e) {
     Loader.loaderFinish();
+ 
 });
 
 $(document).ajaxError(function () {
     toastr["error"]("Sistemde bir hata oluştu! Daha sonra tekrar deneyiniz.");
+       var $modal = $('div.custommodal');
+    $modal.removeClass("in");
+    $modal.modal('hide');
 });
 
 Number.prototype.format = function (n, x, s, c) {
@@ -77,6 +82,6 @@ $(document).ready(function () {
     });
 
     $(document.body).on('hidden.bs.modal', function () {
-        $('.modal').removeData('bs.modal')
+        $(this).find('form')[0].reset();
     });
 });

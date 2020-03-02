@@ -1,29 +1,54 @@
-﻿var Entity =
+﻿
+var AjaxResultEnum = {
+    Success: 1,
+    Warning: 2,
+    Error: 0
+};
+
+var Entity =
 {
-    Init: function (entity, formid, tableid, submitClass = ".entitysubmit", successTitle = null, successMessage = null, errorTitle = null, errorMessage = null) {
+    Init: function(entity,
+        formid,
+        tableid,
+        submitClass = ".entitysubmit",
+        successTitle = null,
+        errorTitle = null
+     ) {
 
-        $("body").delegate(submitClass, "click", function (e) {
-            e.preventDefault();
-            var value = Entity.AddOrEdit(entity, formid, tableid, successTitle, successMessage, errorTitle, errorMessage);
-            if (value == true) {
-                var $btn = $(this);
-                var $modal = $btn.closest('div.custommodal');
-                if ($modal) {
-                    $modal.removeClass("in");
-                    $modal.modal('hide');
+        $("body").delegate(submitClass,
+            "click",
+            function(e) {
+                e.preventDefault();
+                var value = Entity.AddOrEdit(entity,
+                    formid,
+                    tableid,
+                    successTitle,
+                    errorTitle
+                   );
+                if (value === true) {
+                    var $btn = $(this);
+                    var $modal = $btn.closest('div.custommodal');
+                    if ($modal) {
+                        $modal.removeClass("in");
+                        $modal.modal('hide');
+                        $modal.removeData('modal');
+                    }
                 }
-            }
-        });
-
+            });
         var entitydt = DataTableFunc.initDataTable(tableid);
     },
-    Validate: function (formid) {
+    Validate: function(formid) {
         if (!$("#" + formid).validationEngine('validate')) {
             return false;
         }
         return true;
     },
-    AddOrEdit: function (entity, formid, tableid = null, successTitle = null, successMessage = null, errorTitle = null, errorMessage = null) {
+    AddOrEdit: function(entity,
+        formid,
+        tableid = null,
+        successTitle = null,
+        errorTitle = null
+      ) {
         if (this.Validate(formid)) {
             var formData = new FormData($('#' + formid)[0]);
             $.ajax({
@@ -34,28 +59,27 @@
                 datatype: 'json',
                 cache: false,
                 processData: false,
-                success: function (data) {
+                success: function(data) {
                     var res = JSON.parse(data);
-                    if (res.Result == 1) {
-                        if (successTitle != null && successMessage != null) {
+                    if (res.Result === AjaxResultEnum.Success) {
+                        if (successTitle !== null) {
                             var table = $('#' + tableid);
                             var dt = table.DataTable();
                             dt.ajax.reload();
-                            Alert.showAlert("success", successTitle, successMessage, AlertTypeEnum.Sweet);
-                        }
-                        else {
+                            Alert.showAlert("success", successTitle, res.ResultText, AlertTypeEnum.Sweet);
+                        } else {
                             window.location.href = "/" + entity + "/Index";
                         }
-                    }
-                    else {
-                        if (tableid != null && errorMessage != null && errorTitle != null) {
-                            Alert.showAlert("error", errorTitle, errorMessage, AlertTypeEnum.Sweet);
+                    } else {
+                        if (tableid !== null && errorTitle !== null) {
+                            Alert.showAlert("error", errorTitle, res.ResultText, AlertTypeEnum.Sweet);
                         }
                     }
-                }
+                },
+                
             });
-        }
-        else
+            return true;
+        } else
             return false;
     }
-}
+};

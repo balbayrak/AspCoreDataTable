@@ -191,6 +191,7 @@ namespace AspCoreDataTable.Test.Controllers
             {
                 person.id = Guid.NewGuid();
                 personList.Add(person);
+                result.ResultText = "Person Added";
             }
             else
             {
@@ -198,9 +199,10 @@ namespace AspCoreDataTable.Test.Controllers
                 per.surname = person.surname;
                 per.PersonAdress.city = person.PersonAdress.city;
                 per.PersonAdress.country = person.PersonAdress.country;
+                result.ResultText = "Person Updated";
             }
-           
-            result.Result = 1;
+
+            result.Result = AjaxResultEnum.Success;
             return JsonConvert.SerializeObject(result);
         }
     }

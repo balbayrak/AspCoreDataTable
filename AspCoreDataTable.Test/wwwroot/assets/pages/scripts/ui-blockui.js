@@ -56,7 +56,7 @@ var UIBlockUI = function() {
         });
 
         $('#blockui_sample_2_3').click(function() {
-            App.startPageLoading({message: 'Please wait...'});
+            App.startPageLoading({message: 'Lütfen bekleyiniz...'});
 
             window.setTimeout(function() {
                 App.stopPageLoading();
