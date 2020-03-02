@@ -108,7 +108,7 @@ namespace AspCoreDataTable.Core.DataTable.Toolbar
 
                 if (this.exportSetting != null)
                 {
-                    if (this.exportSetting.side.Equals(EnumFormSide.LetfSide))
+                    if (this.exportSetting.formSide.Equals(EnumFormSide.LetfSide))
                     {
                         divActionsLeftLayout.InnerHtml.Append(" " + GetToolbarExportOptions(tableId, this.exportSetting));
                     }
@@ -133,7 +133,7 @@ namespace AspCoreDataTable.Core.DataTable.Toolbar
         public string GetToolbarExportOptions(string tableId, TableExportSetting exportSetting)
         {
             var exporttools = new TagBuilder("div");
-            if (exportSetting.side.Equals(EnumFormSide.RightSide))
+            if (exportSetting.formSide.Equals(EnumFormSide.RightSide))
             {
                 exporttools.AddCssClass("btn-group pull-right");
                 exporttools.Attributes.Add("style", "margin-left:5px");

@@ -10,7 +10,7 @@ namespace AspCoreDataTable.Core.DataTable.Toolbar
         public bool isExportCSV { get; set; }
         public bool isExportExcel { get; set; }
         public bool isPrintable { get; set; }
-        public EnumFormSide side { get; set; }
+        public EnumFormSide formSide { get; set; }
 
         public TableExportSetting()
         {
@@ -18,7 +18,7 @@ namespace AspCoreDataTable.Core.DataTable.Toolbar
             this.isExportExcel = false;
             this.isExportPdf = false;
             this.isPrintable = false;
-            side = EnumFormSide.LetfSide;
+            formSide = EnumFormSide.LetfSide;
             this.title = string.Empty;
             this.cssClass = string.Empty;
         }
@@ -29,7 +29,7 @@ namespace AspCoreDataTable.Core.DataTable.Toolbar
             this.isExportExcel = _isExportExcel;
             this.isExportPdf = _isExportPdf;
             this.isPrintable = _isPrintable;
-            side = _side;
+            formSide = _side;
             this.title = _title;
             this.cssClass = _cssClass;
         }

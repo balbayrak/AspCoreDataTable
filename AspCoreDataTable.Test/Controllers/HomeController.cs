@@ -73,7 +73,7 @@ namespace AspCoreDataTable.Test.Controllers
 
                 if (!string.IsNullOrEmpty(jQueryDataTablesModel.sSearch))
                 {
-                    result = personList.Where(t => t.name.StartsWith(jQueryDataTablesModel.sSearch) || t.surname.StartsWith(jQueryDataTablesModel.sSearch)).Skip(jQueryDataTablesModel.iDisplayStart).Take(jQueryDataTablesModel.iDisplayLength).ToList();
+                    result = personList.Where(t => t.name.ToLower().StartsWith(jQueryDataTablesModel.sSearch.ToLower()) || t.surname.ToLower().StartsWith(jQueryDataTablesModel.sSearch.ToLower())).Skip(jQueryDataTablesModel.iDisplayStart).Take(jQueryDataTablesModel.iDisplayLength).ToList();
                 }
                 else
                 {
@@ -172,12 +172,13 @@ namespace AspCoreDataTable.Test.Controllers
         [HttpGet]
         public IActionResult AddOrEdit(string id)
         {
-            Person person = null;
+            Person person = new Person();
             if (id != "-1")
             {
                 Guid Uid = new Guid(id);
                 person = personList.FirstOrDefault(t => t.id == Uid);
             }
+
             return PartialView("AddOrEdit", person);
         }
 
@@ -189,7 +190,6 @@ namespace AspCoreDataTable.Test.Controllers
             Person per = personList.FirstOrDefault(t => t.id == person.id);
             if(per == null)
             {
-                person.id = Guid.NewGuid();
                 personList.Add(person);
                 result.ResultText = "Person Added";
             }
@@ -204,6 +204,16 @@ namespace AspCoreDataTable.Test.Controllers
 
             result.Result = AjaxResultEnum.Success;
             return JsonConvert.SerializeObject(result);
+        }
+
+        [HttpPost]
+        public void Delete(Person person)
+        {
+            if (person != null)
+            {
+                person = personList.FirstOrDefault(t => t.id == person.id);
+                personList.Remove(person);
+            }
         }
     }
 }

@@ -5,9 +5,9 @@ namespace AspCoreDataTable.Core.DataTable
 {
     public static class MvcHtmlTableExtensions
     {
-        public static ITableBuilder<TModel> DataTableHelper<TModel>(this IHtmlHelper helper) where TModel : class
+        public static ITableLoadBuilder<TModel> DataTableHelper<TModel>(this IHtmlHelper helper,string id) where TModel : class
         {
-            return new TableBuilder<TModel>();
+            return new TableBuilder<TModel>(id);
         }
     }
 }

@@ -5,30 +5,48 @@ using AspCoreDataTable.Core.DataTable.Toolbar;
 using AspCoreDataTable.Core.DataTable.Toolbar.Buttons;
 using AspCoreDataTable.Core.Extensions;
 using AspCoreDataTable.Core.General;
+using AspCoreDataTable.Core.General.Enums;
 using AspCoreDataTable.Core.General.Portlet;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace AspCoreDataTable.Core.DataTable
 {
-    public class TableBuilder<TModel> : ITableBuilder<TModel> where TModel : class
+    public class TableBuilder<TModel> : IHtmlContent, ITableBuilder<TModel>, ITableLoadBuilder<TModel> where TModel : class
     {
-        private TableToolBar TableToolBarActions { get; set; }
-        private PortletForm TablePortletSetting { get; set; }
+        private TableToolBar _tableToolBarActions { get; set; }
+        private PortletForm _tablePortletSetting { get; set; }
+        private EnumPagingType _pagingType { get; set; }
+        private string _id { get; set; }
 
-        private IList<ITableColumnInternal> TableColumns { get; set; }
+        private string _cssClass { get; set; }
 
-        public TableBuilder()
+        private bool _searchable { get; set; }
+
+        private string _loadActionUrl { get; set; }
+
+        private bool _stateSave { get; set; }
+
+        private IList<ITableColumnInternal> _tableColumns { get; set; }
+
+        public TableBuilder(string id)
         {
-            this.TableColumns = new List<ITableColumnInternal>();
-            this.TableToolBarActions = new TableToolBar();
+            this._tableColumns = new List<ITableColumnInternal>();
+            this._tableToolBarActions = new TableToolBar();
+            this._pagingType = EnumPagingType.bootstrap_number;
+            this._id = id;
+            this._searchable = true;
+            this._stateSave = false;
         }
 
-        public TableBuilder<TModel> Columns(Action<ColumnBuilder<TModel>> columnBuilder)
+        public ITableBuilder<TModel> Columns(Action<ColumnBuilder<TModel>> columnBuilder)
         {
             if (columnBuilder != null)
             {
@@ -38,31 +56,35 @@ namespace AspCoreDataTable.Core.DataTable
             return this;
         }
 
-        public IHtmlContent ToHtml(string id, string actionUrl, string CssClass, bool isSearchEnabled = true)
+        private IHtmlContent ToHtml()
         {
             var table = new TagBuilder("table");
-            table.GenerateId(id, "");
+            table.GenerateId(_id, "");
 
-            table.Attributes.Add(HelperConstant.General.DATA_ACTION_URL, actionUrl);
-            
+            table.Attributes.Add(HelperConstant.General.DATA_ACTION_URL, _loadActionUrl);
+
             Guid uniqueId = Guid.NewGuid();
 
             table.Attributes.Add(HelperConstant.General.DATA_COMPONENT_UNIQUE_ID, uniqueId.ToString());
 
-            table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH_ENABLED, isSearchEnabled.ToString());
+            table.Attributes.Add(HelperConstant.DataTable.DATA_SSEARCH_ENABLED, _searchable.ToString());
+
+            table.Attributes.Add(HelperConstant.DataTable.DATA_PAGING_TYPE, _pagingType.ToString());
+
+            table.Attributes.Add(HelperConstant.DataTable.DATA_STATE_SAVE, _stateSave.ToString());
 
 
-            if (!CssClass.Contains(HelperConstant.CssClassName.DATATABLE_CLASS))
+            if (!_cssClass.Contains(HelperConstant.CssClassName.DATATABLE_CLASS))
             {
-                CssClass += " " + HelperConstant.CssClassName.DATATABLE_CLASS;
+                _cssClass += " " + HelperConstant.CssClassName.DATATABLE_CLASS;
             }
 
-            if (!CssClass.Contains(HelperConstant.CssClassName.DATATABLE_CHECK_CLASS))
+            if (!_cssClass.Contains(HelperConstant.CssClassName.DATATABLE_CHECK_CLASS))
             {
-                CssClass += " " + HelperConstant.CssClassName.DATATABLE_CHECK_CLASS;
+                _cssClass += " " + HelperConstant.CssClassName.DATATABLE_CHECK_CLASS;
             }
 
-            table.AddCssClass(CssClass);
+            table.AddCssClass(_cssClass);
 
             TagBuilder thead = new TagBuilder("thead");
             TagBuilder tr = new TagBuilder("tr");
@@ -76,9 +98,9 @@ namespace AspCoreDataTable.Core.DataTable
             int indexCounter = 1;
             string modals = string.Empty;
 
-            foreach (ITableColumnInternal tc in this.TableColumns)
+            foreach (ITableColumnInternal tc in this._tableColumns)
             {
-                tc.tableid = id;
+                tc.tableid = _id;
 
                 if (tc is ITableBoundColumnInternal<TModel>)
                 {
@@ -136,29 +158,29 @@ namespace AspCoreDataTable.Core.DataTable
             table.Attributes.Add(HelperConstant.DataTable.DATA_COLUMN_INFO, datatableStorageObject.Serialize());
             datatableStorageObject = null;
             string toolbar = string.Empty;
-            if (this.TableToolBarActions != null)
+            if (this._tableToolBarActions != null)
             {
                 bool isExportToolEnable = false;
 
-                if (this.TableToolBarActions.exportSetting != null)
-                    isExportToolEnable = this.TableToolBarActions.exportSetting.isExportCSV || this.TableToolBarActions.exportSetting.isExportExcel || this.TableToolBarActions.exportSetting.isExportPdf || this.TableToolBarActions.exportSetting.isPrintable;
+                if (this._tableToolBarActions.exportSetting != null)
+                    isExportToolEnable = this._tableToolBarActions.exportSetting.isExportCSV || this._tableToolBarActions.exportSetting.isExportExcel || this._tableToolBarActions.exportSetting.isExportPdf || this._tableToolBarActions.exportSetting.isPrintable;
 
                 if (isExportToolEnable)
                 {
-                    table.Attributes.Add(HelperConstant.DataTable.DATA_EXPORTCSV, this.TableToolBarActions.exportSetting.isExportCSV.ToString().ToLower());
-                    table.Attributes.Add(HelperConstant.DataTable.DATA_EXPORTEXCEL, this.TableToolBarActions.exportSetting.isExportExcel.ToString().ToLower());
-                    table.Attributes.Add(HelperConstant.DataTable.DATA_EXPORTPDF, this.TableToolBarActions.exportSetting.isExportPdf.ToString().ToLower());
-                    table.Attributes.Add(HelperConstant.DataTable.DATA_PRINTABLE, this.TableToolBarActions.exportSetting.isPrintable.ToString().ToLower());
+                    table.Attributes.Add(HelperConstant.DataTable.DATA_EXPORTCSV, this._tableToolBarActions.exportSetting.isExportCSV.ToString().ToLower());
+                    table.Attributes.Add(HelperConstant.DataTable.DATA_EXPORTEXCEL, this._tableToolBarActions.exportSetting.isExportExcel.ToString().ToLower());
+                    table.Attributes.Add(HelperConstant.DataTable.DATA_EXPORTPDF, this._tableToolBarActions.exportSetting.isExportPdf.ToString().ToLower());
+                    table.Attributes.Add(HelperConstant.DataTable.DATA_PRINTABLE, this._tableToolBarActions.exportSetting.isPrintable.ToString().ToLower());
                 }
 
                 string toolbarModal = string.Empty;
-                toolbar = this.TableToolBarActions.GetToolBarHtml(id, out toolbarModal);
+                toolbar = this._tableToolBarActions.GetToolBarHtml(_id, out toolbarModal);
                 modals += toolbarModal;
             }
 
-            if (this.TablePortletSetting != null)
+            if (this._tablePortletSetting != null)
             {
-                return new HtmlString(this.TablePortletSetting.ToHtml(toolbar + table.ConvertHtmlString() + modals).ToString());
+                return new HtmlString(this._tablePortletSetting.ToHtml(toolbar + table.ConvertHtmlString() + modals).ToString());
 
             }
             else
@@ -167,50 +189,90 @@ namespace AspCoreDataTable.Core.DataTable
             }
         }
 
-        public TableBuilder<TModel> ToolBarActions(Action<ToolBarBuilder<TModel>> toolBarBuilder, TableExportSetting exportSetting)
+        public ITableBuilder<TModel> ToolBarActions(Action<ToolBarBuilder<TModel>> toolBarBuilder, TableExportSetting exportSetting)
         {
             if (toolBarBuilder != null)
             {
                 ToolBarBuilder<TModel> builder = new ToolBarBuilder<TModel>(this, exportSetting);
                 toolBarBuilder(builder);
             }
-            this.TableToolBarActions.exportSetting = exportSetting;
+            this._tableToolBarActions.exportSetting = exportSetting;
 
             return this;
         }
 
-        public TableBuilder<TModel> Portlet(string title, Color color, string iClass)
+        public ITableBuilder<TModel> Portlet(string title, Color color, string iClass)
         {
-            this.TablePortletSetting = this.TablePortletSetting ?? new PortletForm();
-            this.TablePortletSetting.title = title;
-            this.TablePortletSetting.color = color;
-            this.TablePortletSetting.iClass = iClass;
+            this._tablePortletSetting = this._tablePortletSetting ?? new PortletForm();
+            this._tablePortletSetting.title = title;
+            this._tablePortletSetting.color = color;
+            this._tablePortletSetting.iClass = iClass;
+            return this;
+        }
+
+        public ITableBuilder<TModel> PagingType(EnumPagingType pagingType)
+        {
+            this._pagingType = pagingType;
+            return this;
+        }
+
+        public ITableBuilder<TModel> CssClass(string cssClass)
+        {
+            this._cssClass = cssClass;
+            return this;
+        }
+
+        public ITableBuilder<TModel> LoadAction(string loadAction)
+        {
+            this._loadActionUrl = loadAction;
+            return this;
+        }
+
+        public ITableBuilder<TModel> Searching(bool searchable)
+        {
+            this._searchable = searchable;
+            return this;
+        }
+
+        public ITableBuilder<TModel> StateSave(bool stateSave)
+        {
+            this._stateSave = stateSave;
             return this;
         }
 
         public void AddColumn<TProperty>(TableBoundColumn<TModel, TProperty> column)
         {
-            this.TableColumns.Add(column);
+            this._tableColumns.Add(column);
         }
 
         public int GetColumnCount()
         {
-            return this.TableColumns != null ? this.TableColumns.Count : 0;
+            return this._tableColumns != null ? this._tableColumns.Count : 0;
         }
 
         public void AddActionColumn(TableActionColumn column)
         {
-            this.TableColumns.Add(column);
+            this._tableColumns.Add(column);
         }
 
         public void AddCheckColumn(TableCheckColumn column)
         {
-            this.TableColumns.Add(column);
+            this._tableColumns.Add(column);
         }
 
         public void AddToolBarAction(IToolbarModalActionButtonInternal button)
         {
-            this.TableToolBarActions.ToolBarActions.Add(button);
+            this._tableToolBarActions.ToolBarActions.Add(button);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void WriteTo(TextWriter writer, HtmlEncoder encoder)
+        {
+            writer.Write(this.ToHtml());
+
+            writer.Write("<script> $(document).ready(function () {");
+            writer.Write($"var {_id} = DataTableFunc.initDataTable('{_id}');");
+            writer.Write("}</script>");
         }
     }
 }

@@ -14,5 +14,16 @@ namespace AspCoreDataTable.Test.Models
         public string surname { get; set; }
 
         public PersonAdress PersonAdress { get; set; }
+
+        public Person()
+        {
+            id = Guid.NewGuid();
+            name = string.Empty;
+            surname = string.Empty;
+            PersonAdress = new PersonAdress();
+            PersonAdress.Id = Guid.NewGuid();
+            PersonAdress.city = string.Empty;
+            PersonAdress.country = string.Empty;
+        }
     }
 }
