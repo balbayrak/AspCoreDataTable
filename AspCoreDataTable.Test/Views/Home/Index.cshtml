@@ -19,7 +19,7 @@
             {
                 column.CheckColumn(p => p.id).CheckAllEnabled();
                 column.BoundColumn(p => p.id).Title("ID").IsPrimaryKey(true);
-                column.BoundColumn(p => p.name).Title("Name").Searchable(Operation.StartsWith).Visible(false);
+                column.BoundColumn(p => p.name).Title("Name").Searchable(Operation.StartsWith);
                 column.BoundColumn(p => p.surname).Title("Surname").Searchable(Operation.StartsWith);
                 column.BoundColumn(p => p.PersonAdress.city).Title("City").Searchable(Operation.StartsWith);
                 column.BoundColumn(p => p.PersonAdress.country).Title("Country").Searchable(Operation.StartsWith);
@@ -40,6 +40,7 @@
                         .ActionInfo(new ActionInfo { actionUrl = "/Home/Delete", methodType = EnumHttpMethod.POST })
                         .BlockUI()
                         .ConfirmOption(new ConfirmOption("ConfirmMessage", "ConfirmTitle", ConfirmType.Sweet, ""));
+                         
                 });
             })
             .ToolBarActions(action =>
