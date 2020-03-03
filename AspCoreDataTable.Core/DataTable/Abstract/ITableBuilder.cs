@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace AspCoreDataTable.Core.DataTable.Abstract
 {
-    public interface ITableBuilder<TModel> where TModel : class
+    public interface ITableBuilder<TModel> : IFluentInterface where TModel : class
     {
         ITableBuilder<TModel> Columns(Action<ColumnBuilder<TModel>> columnBuilder);
         ITableBuilder<TModel> ToolBarActions(Action<ToolBarBuilder<TModel>> toolBarBuilder, TableExportSetting exportSetting);
