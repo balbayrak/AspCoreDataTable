@@ -4,6 +4,7 @@
     {
         T Title(string title);
         T Width(int width);
+        T Visible(bool visible);
     }
 
 }

@@ -21,6 +21,8 @@ namespace AspCoreDataTable.Core.DataTable.Columns
 
         public string columnTitle { get; set; }
 
+        public bool visible { get; set; }
+
         public int width { get; set; }
 
         public string tableid { get; set; }
@@ -49,10 +51,23 @@ namespace AspCoreDataTable.Core.DataTable.Columns
             return _instance;
         }
 
+        public TInterface Visible(bool visible)
+        {
+            this.visible = visible;
+            return _instance;
+        }
+
         public TInterface Width(int width)
         {
             this.width = width;
             return _instance;
+        }
+
+        public TableColumn()
+        {
+            this.columnIsActionColumn = false;
+            this.width = 0;
+            this.visible = true;
         }
     }
 
@@ -91,7 +106,6 @@ namespace AspCoreDataTable.Core.DataTable.Columns
         public TableActionColumn()
         {
             this.columnIsActionColumn = true;
-            this.width = 0;
         }
 
         public ITableActionColumn Actions(Action<ActionBuilder> actionBuilder)
@@ -198,16 +212,14 @@ namespace AspCoreDataTable.Core.DataTable.Columns
         public string searchable { get; set; }
 
 
-        public TableBoundColumn(Expression<Func<TModel, TProperty>> expression, int columnCount)
+        public TableBoundColumn(Expression<Func<TModel, TProperty>> expression, int columnCount) : base()
         {
             string memberStr = (expression.Body as MemberExpression).ToString();
             this.columnPropertyExp = memberStr;
             this.columnProperty = (expression.Body as MemberExpression).Member.Name + columnCount.ToString();
             this.columnTitle = Regex.Replace(this.columnProperty, "([a-z])([A-Z])", "$1 $2");
             this.CompiledExpression = expression.Compile();
-            this.columnIsActionColumn = false;
             this.orderByDirection = string.Empty;
-            this.width = 0;
             this.searchable = null;
         }
 
@@ -250,7 +262,7 @@ namespace AspCoreDataTable.Core.DataTable.Columns
 
     public class TableCheckColumn : TableColumn<ITableCheckColumn>, ITableCheckColumn, ITableCheckColumnInternal
     {
-        public TableCheckColumn(string propertyName)
+        public TableCheckColumn(string propertyName) : base()
         {
             this.columnTitle = string.Empty;
             this.propertyName = propertyName;
