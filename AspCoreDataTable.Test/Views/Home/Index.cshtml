@@ -23,6 +23,7 @@
                 column.BoundColumn(p => p.surname).Title("Surname").Searchable(Operation.StartsWith);
                 column.BoundColumn(p => p.PersonAdress.city).Title("City").Searchable(Operation.StartsWith);
                 column.BoundColumn(p => p.PersonAdress.country).Title("Country").Searchable(Operation.StartsWith);
+              
                 column.ActionColumn().Title("Actions").Actions(action =>
                 {
                     action.ModalButton(string.Empty)
@@ -67,7 +68,8 @@
 {
     <script>
         $(document).ready(function () {
-            Entity.Init('Home', 'formPerson', 'persontable', '.entitysubmit', 'Success!', 'Error');
+            var dt = Entity.Init('Home', 'formPerson', 'persontable', '.entitysubmit', 'Success!', 'Error');
+          
         });
     </script>
 }
