@@ -40,7 +40,9 @@ namespace AspCoreDataTable.Core.DataTable.Storage
                         primarykey = prop.Evaluation(entity);
                     }
                     else
-                        dictionary[prop.columnProperty] = prop.Evaluation(entity);
+                    {
+                       dictionary[prop.columnProperty] = prop.Evaluation(entity);
+                    }
                 }
                 if (datatableSessionObject.DatatableActions != null && datatableSessionObject.DatatableActions.Count > 0)
                 {

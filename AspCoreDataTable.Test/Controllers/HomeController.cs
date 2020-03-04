@@ -1,5 +1,4 @@
 ﻿using AspCoreDataTable.Core.DataTable.ModelBinder;
-using AspCoreDataTable.Core.DataTable.Storage;
 using AspCoreDataTable.Core.Extensions;
 using AspCoreDataTable.General;
 using AspCoreDataTable.Test.Models;
@@ -8,7 +7,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace AspCoreDataTable.Test.Controllers
 {
@@ -56,6 +54,51 @@ namespace AspCoreDataTable.Test.Controllers
                             country="belçika"
                         }}
                 };
+
+
+        public static List<Person> closedpersonNamesList = new List<Person>
+                {
+                    new Person() {
+                        id = Guid.NewGuid(),name="-",surname="Estrada",
+                        PersonAdress = new PersonAdress
+                        {
+                            city="ankara",
+                            country="Turkey"
+                        }
+
+                    },
+                    new Person() {id = Guid.NewGuid(),name="-",surname="Davis",
+                     PersonAdress = new PersonAdress
+                        {
+                            city="istanbul",
+                            country="Turkey"
+                        }},
+                    new Person() {id = Guid.NewGuid(),name="-",surname="Shaw",
+                      PersonAdress = new PersonAdress
+                        {
+                            city="berlin",
+                            country="almanya"
+                        }},
+                    new Person() {id = Guid.NewGuid(),name="-",surname="Perez",
+                     PersonAdress = new PersonAdress
+                        {
+                            city="liverpool",
+                            country="ingiltere"
+                        }},
+                    new Person() {id = Guid.NewGuid(),name="-",surname="Freeman",
+                     PersonAdress = new PersonAdress
+                     {
+                            city="paris",
+                            country="fransa"
+                        }},
+                    new Person() {id = Guid.NewGuid(),name="-",surname="Kerr",
+                     PersonAdress = new PersonAdress
+                     {
+                            city="brüksel",
+                            country="<label style=\"background-color:#87D37C; border-radius:10px; padding:5px; font-size:13px; color:white;width:110px\">belçika</label>"
+                        }}
+                };
+
         public HomeController()
         {
         }
@@ -70,7 +113,7 @@ namespace AspCoreDataTable.Test.Controllers
         {
             try
             {
-                return Json(jQueryDataTablesModel.ToJqueryDataTablesResponse(personList));
+                return Json(jQueryDataTablesModel.ToJqueryDataTablesResponse(closedpersonNamesList));
             }
             catch
             {

@@ -100,51 +100,54 @@ namespace AspCoreDataTable.Core.DataTable
 
             foreach (ITableColumnInternal tc in this._tableColumns)
             {
-                tc.tableid = _id;
-
-                if (tc is ITableBoundColumnInternal<TModel>)
+                if (tc.visible)
                 {
-                    ITableBoundColumnInternal<TModel> boundColumn = ((ITableBoundColumnInternal<TModel>)tc);
+                    tc.tableid = _id;
 
-                    if (!boundColumn.columnIsPrimaryKey)
+                    if (tc is ITableBoundColumnInternal<TModel>)
                     {
+                        ITableBoundColumnInternal<TModel> boundColumn = ((ITableBoundColumnInternal<TModel>)tc);
+
+                        if (!boundColumn.columnIsPrimaryKey)
+                        {
+                            tr.InnerHtml.Append(tc.HtmlColumn());
+                        }
+
+                        var bcolumn = new DatatableBoundColumn<TModel>
+                        {
+                            columnIsPrimaryKey = boundColumn.columnIsPrimaryKey,
+                            columnProperty = boundColumn.columnProperty,
+                            column_Property_Exp = boundColumn.columnPropertyExp,
+                            orderByDirection = boundColumn.orderByDirection,
+                            searchable = boundColumn.searchable
+                        };
+
+
+                        datatableStorageObject.DatatableProperties.Add(bcolumn);
+                    }
+                    else if (tc is ITableCheckColumnInternal)
+                    {
+                        ITableCheckColumnInternal checkColumn = ((ITableCheckColumnInternal)tc);
+                        checkColumn.actionColumnIndex = indexCounter++;
                         tr.InnerHtml.Append(tc.HtmlColumn());
+
+                        datatableStorageObject.DatatableActions = datatableStorageObject.DatatableActions ?? new List<DatatableActionColumn>();
+                        datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = checkColumn.checkActionHtml, ActionColumnHeader = checkColumn.columnDataProperty });
                     }
-
-                    var bcolumn = new DatatableBoundColumn<TModel>
+                    else
                     {
-                        columnIsPrimaryKey = boundColumn.columnIsPrimaryKey,
-                        columnProperty = boundColumn.columnProperty,
-                        column_Property_Exp = boundColumn.columnPropertyExp,
-                        orderByDirection = boundColumn.orderByDirection,
-                        searchable = boundColumn.searchable
-                    };
+                        ITableActionColumnInternal act = ((ITableActionColumnInternal)tc);
+                        act.actionColumnIndex = indexCounter++;
+                        tr.InnerHtml.Append(tc.HtmlColumn());
 
+                        if (!string.IsNullOrEmpty(act.columnActionsModalHtml))
+                        {
+                            modals += act.columnActionsModalHtml;
+                        }
 
-                    datatableStorageObject.DatatableProperties.Add(bcolumn);
-                }
-                else if (tc is ITableCheckColumnInternal)
-                {
-                    ITableCheckColumnInternal checkColumn = ((ITableCheckColumnInternal)tc);
-                    checkColumn.actionColumnIndex = indexCounter++;
-                    tr.InnerHtml.Append(tc.HtmlColumn());
-
-                    datatableStorageObject.DatatableActions = datatableStorageObject.DatatableActions ?? new List<DatatableActionColumn>();
-                    datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = checkColumn.checkActionHtml, ActionColumnHeader = checkColumn.columnDataProperty });
-                }
-                else
-                {
-                    ITableActionColumnInternal act = ((ITableActionColumnInternal)tc);
-                    act.actionColumnIndex = indexCounter++;
-                    tr.InnerHtml.Append(tc.HtmlColumn());
-
-                    if (!string.IsNullOrEmpty(act.columnActionsModalHtml))
-                    {
-                        modals += act.columnActionsModalHtml;
+                        datatableStorageObject.DatatableActions = datatableStorageObject.DatatableActions ?? new List<DatatableActionColumn>();
+                        datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = act.columnActionsHtml, ActionColumnHeader = act.columnDataProperty });
                     }
-
-                    datatableStorageObject.DatatableActions = datatableStorageObject.DatatableActions ?? new List<DatatableActionColumn>();
-                    datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = act.columnActionsHtml, ActionColumnHeader = act.columnDataProperty });
                 }
             }
 
