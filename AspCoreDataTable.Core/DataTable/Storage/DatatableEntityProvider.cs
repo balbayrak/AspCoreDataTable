@@ -41,12 +41,7 @@ namespace AspCoreDataTable.Core.DataTable.Storage
                     }
                     else
                     {
-                        if(!string.IsNullOrEmpty(prop.searchable))
-                            dictionary[prop.columnProperty] = prop.Evaluation(entity);
-                        else
-                        {
-                            dictionary[prop.columnProperty] = "-";
-                        }
+                       dictionary[prop.columnProperty] = prop.Evaluation(entity);
                     }
                 }
                 if (datatableSessionObject.DatatableActions != null && datatableSessionObject.DatatableActions.Count > 0)
