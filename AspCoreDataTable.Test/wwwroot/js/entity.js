@@ -5,16 +5,17 @@
         tableid,
         submitClass = ".entitysubmit",
         successTitle = null,
-        errorMessage = null) {
+        errorTitle = null) {
         $("body").delegate(submitClass,
             "click",
             function(e) {
                 e.preventDefault();
                 var $btn = $(this);
-                Entity.AddOrEdit($btn, entity, formid, tableid, successTitle,  errorMessage);
+                Entity.AddOrEdit($btn, entity, formid, tableid, successTitle, errorTitle);
             });
 
         var entitydt = DataTableFunc.initDataTable(tableid);
+        return entitydt;
     },
     Validate: function(formid) {
         if (!$("#" + formid).validationEngine('validate')) {
@@ -27,9 +28,9 @@
         formid,
         tableid = null,
         successTitle = null,
-        errorMessage = null) {
+        errorTitle = null) {
         if (this.Validate(formid)) {
-            var formData = new FormData($('#' + formid)[$('#formPerson').length -1]);
+            var formData = new FormData($('#' + formid)[$('#' + formid).length -1]);
             $.ajax({
                 url: "/" + entity + "/AddOrEdit",
                 type: "POST",
@@ -52,7 +53,7 @@
                         }
                     } else {
                         if (tableid !== null) {
-                            Alert.showAlert("error", errorTitle, errorMessage, AlertTypeEnum.Sweet);
+                            Alert.showAlert("error", errorTitle, res.ResultText, AlertTypeEnum.Sweet);
                             Modal.CloseModal(btnRef);
                         }
                     }
