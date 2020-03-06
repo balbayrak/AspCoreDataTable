@@ -13,16 +13,16 @@ namespace AspCoreDataTable.Core.DataTable.Toolbar
             TableBuilder = tableBuilder;
         }
 
-        public ITableActionButton<IModalActionButton> ModalActionButton(string id)
+        public IToolbarActionButton<IModalActionButton> ModalActionButton()
         {
-            ToolBarModalActionButton act = new ToolBarModalActionButton(id);
+            ToolBarModalActionButton act = new ToolBarModalActionButton(string.Empty);
             TableBuilder.AddToolBarAction(act);
             return act;
         }
 
-        public ITableActionButton<IDefaultActionButton> ActionButton(string id)
+        public IToolbarActionButton<IDefaultActionButton> ActionButton()
         {
-            ToolBarDefaultActionButton act = new ToolBarDefaultActionButton(id);
+            ToolBarDefaultActionButton act = new ToolBarDefaultActionButton(string.Empty);
             TableBuilder.AddToolBarAction(act);
             return act;
         }

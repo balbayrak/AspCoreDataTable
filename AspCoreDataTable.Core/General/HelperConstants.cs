@@ -12,6 +12,12 @@ namespace AspCoreDataTable.Core.General
 
             public static char SPLIT_CHAR1 = '|';
 
+            public static char SPLIT_CHAR2 = '€';
+
+            public static char SPLIT_CHAR3 = '£';
+
+
+          
             public static readonly string DATA_COMPONENT_UNIQUE_ID = "data-uid";
 
             public static readonly string LINK_ONCLICK = "onclick";

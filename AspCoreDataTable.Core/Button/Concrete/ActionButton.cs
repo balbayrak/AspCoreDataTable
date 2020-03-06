@@ -1,5 +1,6 @@
 ﻿using AspCoreDataTable.Core.Block;
 using AspCoreDataTable.Core.Button.Abstract;
+using AspCoreDataTable.Core.DataTable.Columns.Buttons;
 using AspCoreDataTable.Core.Extensions;
 using AspCoreDataTable.Core.General;
 using AspCoreDataTable.Core.General.Enums;
@@ -21,6 +22,7 @@ namespace AspCoreDataTable.Core.Button.Concrete
         public string iclass { get; set; }
         public string id { get; set; }
         public string text { get; set; }
+        public Condition condition { get; set; }
 
         public T ActionInfo(ActionInfo action)
         {
@@ -53,12 +55,14 @@ namespace AspCoreDataTable.Core.Button.Concrete
         {
             this.id = id;
             this.block = new BlockInfo { blockTarget = null, isEnabled = false };
+            this.condition = null;
         }
-        public ActionButton(string id, string text, string iClass, string cssClass,bool blockui, string blockTarget, string actionUrl, EnumHttpMethod httpMethod = EnumHttpMethod.GET) : this(id)
+        public ActionButton(string id, string text, string iClass, string cssClass, bool blockui, string blockTarget, string actionUrl, EnumHttpMethod httpMethod = EnumHttpMethod.GET) : this(id)
         {
             this.text = text;
             this.iclass = iClass;
             this.cssClass = cssClass;
+            this.condition = null;
 
             if (blockui)
             {
@@ -128,15 +132,15 @@ namespace AspCoreDataTable.Core.Button.Concrete
         {
             TagBuilder link = BuildActionButton();
 
-            return link.ConvertHtmlString();
+            var linkStr= link.ConvertHtmlString();
+
+            return linkStr;
 
         }
-
         public virtual IHtmlContent ToHtml()
         {
             return new HtmlString(string.Empty);
         }
-
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {

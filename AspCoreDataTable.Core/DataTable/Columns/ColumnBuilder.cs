@@ -15,15 +15,15 @@ namespace AspCoreDataTable.Core.DataTable.Columns
         {
             TableBuilder = tableBuilder;
         }
-        public ITableBoundColumn BoundColumn<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        public ITableBoundColumn<TModel, TProperty> BoundColumn<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             TableBoundColumn<TModel, TProperty> column = new TableBoundColumn<TModel, TProperty>(expression,TableBuilder.GetColumnCount());
             TableBuilder.AddColumn(column);
             return column;
         }
-        public ITableActionColumn ActionColumn()
+        public ITableActionColumn<TModel> ActionColumn()
         {
-            TableActionColumn column = new TableActionColumn();
+            TableActionColumn<TModel> column = new TableActionColumn<TModel>();
             TableBuilder.AddActionColumn(column);
             return column;
         }

@@ -15,7 +15,7 @@ namespace AspCoreDataTable.Test.Controllers
         public static List<Person> personList = new List<Person>
                 {
                     new Person() {
-                        id = Guid.NewGuid(),name="Linda",surname="Estrada",
+                        id = Guid.NewGuid(),name="Linda",surname="Estrada",status = 1,
                         PersonAdress = new PersonAdress
                         {
                             city="ankara",
@@ -23,31 +23,31 @@ namespace AspCoreDataTable.Test.Controllers
                         }
 
                     },
-                    new Person() {id = Guid.NewGuid(),name="George",surname="Davis",
+                    new Person() {id = Guid.NewGuid(),name="George",surname="Davis",status = 0,
                      PersonAdress = new PersonAdress
                         {
                             city="istanbul",
                             country="Turkey"
                         }},
-                    new Person() {id = Guid.NewGuid(),name="Marilyn",surname="Shaw",
+                    new Person() {id = Guid.NewGuid(),name="Marilyn",surname="Shaw",status = 0,
                       PersonAdress = new PersonAdress
                         {
                             city="berlin",
                             country="almanya"
                         }},
-                    new Person() {id = Guid.NewGuid(),name="Terry",surname="Perez",
+                    new Person() {id = Guid.NewGuid(),name="Terry",surname="Perez",status = 1,
                      PersonAdress = new PersonAdress
                         {
                             city="liverpool",
                             country="ingiltere"
                         }},
-                    new Person() {id = Guid.NewGuid(),name="Henry",surname="Freeman",
+                    new Person() {id = Guid.NewGuid(),name="Henry",surname="Freeman",status = 0,
                      PersonAdress = new PersonAdress
                      {
                             city="paris",
                             country="fransa"
                         }},
-                    new Person() {id = Guid.NewGuid(),name="John",surname="Kerr",
+                    new Person() {id = Guid.NewGuid(),name="John",surname="Kerr",status = 1,
                      PersonAdress = new PersonAdress
                      {
                             city="brüksel",
@@ -55,49 +55,6 @@ namespace AspCoreDataTable.Test.Controllers
                         }}
                 };
 
-
-        public static List<Person> closedpersonNamesList = new List<Person>
-                {
-                    new Person() {
-                        id = Guid.NewGuid(),name="-",surname="Estrada",
-                        PersonAdress = new PersonAdress
-                        {
-                            city="ankara",
-                            country="Turkey"
-                        }
-
-                    },
-                    new Person() {id = Guid.NewGuid(),name="-",surname="Davis",
-                     PersonAdress = new PersonAdress
-                        {
-                            city="istanbul",
-                            country="Turkey"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="-",surname="Shaw",
-                      PersonAdress = new PersonAdress
-                        {
-                            city="berlin",
-                            country="almanya"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="-",surname="Perez",
-                     PersonAdress = new PersonAdress
-                        {
-                            city="liverpool",
-                            country="ingiltere"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="-",surname="Freeman",
-                     PersonAdress = new PersonAdress
-                     {
-                            city="paris",
-                            country="fransa"
-                        }},
-                    new Person() {id = Guid.NewGuid(),name="-",surname="Kerr",
-                     PersonAdress = new PersonAdress
-                     {
-                            city="brüksel",
-                            country="<label style=\"background-color:#87D37C; border-radius:10px; padding:5px; font-size:13px; color:white;width:110px\">belçika</label>"
-                        }}
-                };
 
         public HomeController()
         {
@@ -113,7 +70,7 @@ namespace AspCoreDataTable.Test.Controllers
         {
             try
             {
-                return Json(jQueryDataTablesModel.ToJqueryDataTablesResponse(closedpersonNamesList));
+                return Json(jQueryDataTablesModel.ToJqueryDataTablesResponse(personList));
             }
             catch
             {

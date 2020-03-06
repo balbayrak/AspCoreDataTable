@@ -1,4 +1,5 @@
 ﻿using AspCoreDataTable.Core.DataTable.Abstract;
+using AspCoreDataTable.Core.DataTable.Columns.Buttons;
 using AspCoreDataTable.Core.General;
 using AspCoreDataTable.Core.General.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,10 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace AspCoreDataTable.Core.DataTable.Columns
 {
-    public class TableBoundColumn<TModel, TProperty> : TableColumn<ITableBoundColumn>, ITableBoundColumn, ITableBoundColumnInternal<TModel>
+    public class TableBoundColumn<TModel, TProperty> : TableColumn<ITableBoundColumn<TModel, TProperty>>, ITableBoundColumn<TModel, TProperty>, ITableBoundColumnInternal<TModel>
         where TModel : class
     {
-        protected override ITableBoundColumn _instance
+        protected override ITableBoundColumn<TModel, TProperty> _instance
         {
             get
             {
@@ -19,36 +20,19 @@ namespace AspCoreDataTable.Core.DataTable.Columns
             }
         }
 
-        public Func<TModel, TProperty> CompiledExpression
-        {
-            get;
-            set;
-        }
-
         public string orderByDirection { get; set; }
 
-        public bool columnIsPrimaryKey
-        {
-            get; set;
-        }
+        public bool columnIsPrimaryKey { get; set; }
 
-        public string columnProperty
-        {
-            get; set;
-        }
+        public string columnProperty { get; set; }
 
-        public string columnPropertyExp
-        {
-            get; set;
-        }
-
-        public string Evaluate(TModel model)
-        {
-            var result = this.CompiledExpression(model);
-            return result == null ? string.Empty : result.ToString();
-        }
+        public string columnPropertyExp { get; set; }
 
         public string searchable { get; set; }
+
+        public Condition condition { get; set; }
+
+        public string css { get; set; }
 
 
         public TableBoundColumn(Expression<Func<TModel, TProperty>> expression, int columnCount) : base()
@@ -57,18 +41,18 @@ namespace AspCoreDataTable.Core.DataTable.Columns
             this.columnPropertyExp = memberStr;
             this.columnProperty = (expression.Body as MemberExpression).Member.Name + columnCount.ToString();
             this.columnTitle = Regex.Replace(this.columnProperty, "([a-z])([A-Z])", "$1 $2");
-            this.CompiledExpression = expression.Compile();
             this.orderByDirection = string.Empty;
             this.searchable = null;
+            this.condition = null;
         }
 
-        public ITableBoundColumn IsPrimaryKey(bool value)
+        public ITableBoundColumn<TModel, TProperty> IsPrimaryKey(bool value)
         {
             this.columnIsPrimaryKey = value;
             return _instance;
         }
 
-        public ITableBoundColumn OrderBy(EnumSortingDirection direction)
+        public ITableBoundColumn<TModel, TProperty> OrderBy(EnumSortingDirection direction)
         {
             this.orderByDirection = direction == EnumSortingDirection.Ascending ? "asc" : "desc";
             return _instance;
@@ -91,11 +75,12 @@ namespace AspCoreDataTable.Core.DataTable.Columns
             return column;
         }
 
-        public ITableBoundColumn Searchable(Operation operation)
+        public ITableBoundColumn<TModel, TProperty> Searchable(Operation operation)
         {
             this.searchable = operation.GetHashCode().ToString();
             return _instance;
 
         }
+
     }
 }

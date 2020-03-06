@@ -3,8 +3,9 @@ using System;
 
 namespace AspCoreDataTable.Core.DataTable.Abstract
 {
-    public interface ITableActionColumn : ITableColumn<ITableActionColumn>
+    public interface ITableActionColumn<TModel> : ITableColumn<ITableActionColumn<TModel>>
+        where TModel : class
     {
-        ITableActionColumn Actions(Action<ActionBuilder> actionBuilder);
+        ITableActionColumn<TModel> Actions(Action<ActionBuilder<TModel>> actionBuilder);
     }
 }

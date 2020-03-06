@@ -3,6 +3,7 @@ using AspCoreDataTable.Core.DataTable.Toolbar;
 using AspCoreDataTable.Core.General.Enums;
 using System;
 using System.Drawing;
+using System.Linq.Expressions;
 
 namespace AspCoreDataTable.Core.DataTable.Abstract
 {
@@ -15,6 +16,7 @@ namespace AspCoreDataTable.Core.DataTable.Abstract
         ITableBuilder<TModel> CssClass(string cssClass);
         ITableBuilder<TModel> Searching(bool searchable);
         ITableBuilder<TModel> StateSave(bool stateSave);
+        ITableBuilder<TModel> RowsCssCondition<TProperty>(Expression<Func<TModel, TProperty>> expression, object value, string css);
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AspCoreDataTable.Core.Block;
 using AspCoreDataTable.Core.Button.Concrete;
+using AspCoreDataTable.Core.DataTable.Columns.Buttons;
 
 namespace AspCoreDataTable.Core.Button.Abstract
 {
@@ -12,6 +13,7 @@ namespace AspCoreDataTable.Core.Button.Abstract
         string iclass { get; set; }
         BlockInfo block { get; set; }
         string CreateLink();
+        Condition condition { get; set; }
 
     }
 }

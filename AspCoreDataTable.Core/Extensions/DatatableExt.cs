@@ -94,6 +94,9 @@ namespace AspCoreDataTable.Core.Extensions
             encryptionDict.Add("<input class=", "ée4");
             encryptionDict.Add("Actions_", "ée5");
             encryptionDict.Add("btn-blockui-modal", "ée6");
+            encryptionDict.Add("conditions", "ée7");
+            encryptionDict.Add("property", "ée8");
+            encryptionDict.Add("value", "ée9");
 
 
             foreach (var key in encryptionDict.Keys)

@@ -12,7 +12,8 @@ using System.Text.RegularExpressions;
 
 namespace AspCoreDataTable.Core.DataTable.Columns
 {
-    public class TableActionColumn : TableColumn<ITableActionColumn>, ITableActionColumn, ITableActionColumnInternal
+    public class TableActionColumn<TModel> : TableColumn<ITableActionColumn<TModel>>, ITableActionColumn<TModel>, ITableActionColumnInternal
+        where TModel : class
     {
         public List<IActionButtonInternal> actions { get; set; }
 
@@ -36,7 +37,7 @@ namespace AspCoreDataTable.Core.DataTable.Columns
             }
         }
 
-        protected override ITableActionColumn _instance
+        protected override ITableActionColumn<TModel> _instance
         {
             get
             {
@@ -49,11 +50,11 @@ namespace AspCoreDataTable.Core.DataTable.Columns
             this.columnIsActionColumn = true;
         }
 
-        public ITableActionColumn Actions(Action<ActionBuilder> actionBuilder)
+        public ITableActionColumn<TModel> Actions(Action<ActionBuilder<TModel>> actionBuilder)
         {
             if (actionBuilder != null)
             {
-                ActionBuilder builder = new ActionBuilder(this);
+                ActionBuilder<TModel> builder = new ActionBuilder<TModel>(this);
                 actionBuilder(builder);
             }
             return _instance;
@@ -85,7 +86,9 @@ namespace AspCoreDataTable.Core.DataTable.Columns
                             actionurl = actionurl.StartsWith("/") ? actionurl : "/" + actionurl;
                             actionItem.action.actionUrl = actionurl;
                         }
-                        columnActionsHtml += actionItem.CreateLink();
+                       
+                        columnActionsHtml += actionItem.CreateLink(); ;
+                       
 
                         if (actionItem is ModalActionButton)
                         {

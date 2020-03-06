@@ -13,6 +13,8 @@ namespace AspCoreDataTable.Test.Models
 
         public string surname { get; set; }
 
+        public int status { get; set; }
+
         public PersonAdress PersonAdress { get; set; }
 
         public Person()

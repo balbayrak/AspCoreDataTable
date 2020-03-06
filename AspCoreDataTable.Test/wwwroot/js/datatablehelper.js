@@ -93,23 +93,23 @@ var DataTableFunc = {
                 aoData.push({ name: "datatableId", value: uniqueid });
                 aoData.push({ name: "columnInfo", value: columnInfo });
             },
-            initComplete: function (settings, json) {
-                var api = new $.fn.dataTable.Api(settings);
-                var tableColumns = api.rows().eq(0).columns();
-                tableColumns.every(function (index) {
-                    var data = this.data();
-                    if (data[0] == "-") {
-                        api.columns([index]).visible(false);
-                    }
-                });
-            }
-            //fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-
-            //    //$(nRow).attr('data-blah', "modal");
-
+            //initComplete: function (settings, json) {
+            //    var api = new $.fn.dataTable.Api(settings);
+            //    var tableColumns = api.rows().eq(0).columns();
+            //    tableColumns.every(function (index) {
+            //        var data = this.data();
+            //        if (data[0] == "-") {
+            //            api.columns([index]).visible(false);
+            //        }
+            //    });
             //}
+            "fnRowCallback": function (nRow, aData) {
+                if (aData[nRow._DT_RowIndex] != null && aData[nRow._DT_RowIndex] != 'undefined') {
+                    $('td', nRow).css('background-color', '#f2dede');
+                }
+            }
         });
-       
+
 
         $("#" + tableid + '_paginate').click(function () {
             var thead = item.find("thead");

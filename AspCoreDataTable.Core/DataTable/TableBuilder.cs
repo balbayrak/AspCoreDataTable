@@ -1,5 +1,6 @@
 ﻿using AspCoreDataTable.Core.DataTable.Abstract;
 using AspCoreDataTable.Core.DataTable.Columns;
+using AspCoreDataTable.Core.DataTable.Columns.Buttons;
 using AspCoreDataTable.Core.DataTable.Storage;
 using AspCoreDataTable.Core.DataTable.Toolbar;
 using AspCoreDataTable.Core.DataTable.Toolbar.Buttons;
@@ -14,6 +15,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -34,6 +37,10 @@ namespace AspCoreDataTable.Core.DataTable
 
         private bool _stateSave { get; set; }
 
+        private string _rowCss { get; set; }
+
+        private Condition _rowCondition { get; set; }
+
         private IList<ITableColumnInternal> _tableColumns { get; set; }
 
         public TableBuilder(string id)
@@ -44,6 +51,8 @@ namespace AspCoreDataTable.Core.DataTable
             this._id = id;
             this._searchable = true;
             this._stateSave = false;
+            this._rowCss = null;
+            this._rowCondition = null;
         }
 
         public ITableBuilder<TModel> Columns(Action<ColumnBuilder<TModel>> columnBuilder)
@@ -53,6 +62,16 @@ namespace AspCoreDataTable.Core.DataTable
                 ColumnBuilder<TModel> builder = new ColumnBuilder<TModel>(this);
                 columnBuilder(builder);
             }
+            return this;
+        }
+
+        public ITableBuilder<TModel> RowsCssCondition<TProperty>(Expression<Func<TModel, TProperty>> expression, object value, string css)
+        {
+            this._rowCondition = new Condition();
+            string memberStr = (expression.Body as MemberExpression).ToString();
+            this._rowCondition.property = memberStr;
+            this._rowCondition.value = value;
+            this._rowCss = css;
             return this;
         }
 
@@ -95,6 +114,9 @@ namespace AspCoreDataTable.Core.DataTable
             DatatableStorageObject<TModel> datatableStorageObject = new DatatableStorageObject<TModel>();
             datatableStorageObject.DatatableProperties = new List<DatatableBoundColumn<TModel>>();
 
+            datatableStorageObject.rowCssCondition = _rowCondition;
+            datatableStorageObject.rowCss = _rowCss;
+
             int indexCounter = 1;
             string modals = string.Empty;
 
@@ -119,9 +141,8 @@ namespace AspCoreDataTable.Core.DataTable
                             columnProperty = boundColumn.columnProperty,
                             column_Property_Exp = boundColumn.columnPropertyExp,
                             orderByDirection = boundColumn.orderByDirection,
-                            searchable = boundColumn.searchable
+                            searchable = boundColumn.searchable,
                         };
-
 
                         datatableStorageObject.DatatableProperties.Add(bcolumn);
                     }
@@ -145,8 +166,11 @@ namespace AspCoreDataTable.Core.DataTable
                             modals += act.columnActionsModalHtml;
                         }
 
+                        Dictionary<int, Condition> conditions = act.actions.Select((element, index) => element.condition != null ? new { conditionIndex = index, condition = element.condition } : null)
+                            .Where(t => t != null).ToDictionary(t => t.conditionIndex, t => t.condition);
+
                         datatableStorageObject.DatatableActions = datatableStorageObject.DatatableActions ?? new List<DatatableActionColumn>();
-                        datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = act.columnActionsHtml, ActionColumnHeader = act.columnDataProperty });
+                        datatableStorageObject.DatatableActions.Add(new DatatableActionColumn { ActionColumn = act.columnActionsHtml, ActionColumnHeader = act.columnDataProperty, conditions = conditions });
                     }
                 }
             }
@@ -253,7 +277,7 @@ namespace AspCoreDataTable.Core.DataTable
             return this._tableColumns != null ? this._tableColumns.Count : 0;
         }
 
-        public void AddActionColumn(TableActionColumn column)
+        public void AddActionColumn(TableActionColumn<TModel> column)
         {
             this._tableColumns.Add(column);
         }
