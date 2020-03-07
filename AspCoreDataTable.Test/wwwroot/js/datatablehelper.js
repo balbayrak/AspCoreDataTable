@@ -105,7 +105,7 @@ var DataTableFunc = {
             //}
             "fnRowCallback": function (nRow, aData) {
                 if (aData[nRow._DT_RowIndex] != null && aData[nRow._DT_RowIndex] != 'undefined') {
-                    $('td', nRow).css('background-color', '#f2dede');
+                    $('td', nRow).addClass(aData[nRow._DT_RowIndex]);
                 }
             }
         });

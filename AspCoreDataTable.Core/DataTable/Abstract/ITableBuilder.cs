@@ -1,4 +1,5 @@
 ﻿using AspCoreDataTable.Core.DataTable.Columns;
+using AspCoreDataTable.Core.DataTable.Rows;
 using AspCoreDataTable.Core.DataTable.Toolbar;
 using AspCoreDataTable.Core.General.Enums;
 using System;
@@ -16,7 +17,7 @@ namespace AspCoreDataTable.Core.DataTable.Abstract
         ITableBuilder<TModel> CssClass(string cssClass);
         ITableBuilder<TModel> Searching(bool searchable);
         ITableBuilder<TModel> StateSave(bool stateSave);
-        ITableBuilder<TModel> RowsCssCondition<TProperty>(Expression<Func<TModel, TProperty>> expression, object value, string css);
+        ITableBuilder<TModel> RowCssConditions(Action<RowCssBuilder<TModel>> rowCssBuilder);
 
     }
 }

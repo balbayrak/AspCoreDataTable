@@ -4,6 +4,7 @@
 }
 
 
+
 <br />
 <br />
 <div class="text-center">
@@ -15,7 +16,12 @@
     <div class="col-md-12">
         @(Html.DataTableHelper<Person>("persontable")
             .LoadAction("/Home/LoadTable")
-            .RowsCssCondition(p => p.PersonAdress.city, "Berlin","#f2dede")
+            .RowCssConditions(condition =>
+            {
+                condition.AddRowCss(p => p.status, 1, "red");
+                condition.AddRowCss(p => p.status, 0, "yellow");
+                condition.AddRowCss(p => p.status, -1, "blue");
+            })
             .Columns(column =>
             {
                 column.CheckColumn(p => p.id).CheckAllEnabled();
@@ -24,7 +30,7 @@
                 column.BoundColumn(p => p.surname).Title("Surname").Searchable(Operation.StartsWith);
                 column.BoundColumn(p => p.PersonAdress.city).Title("City").Searchable(Operation.StartsWith);
                 column.BoundColumn(p => p.PersonAdress.country).Title("Country").Searchable(Operation.StartsWith);
-              
+
                 column.ActionColumn().Title("Actions").Actions(action =>
                 {
                     action.ModalButton()
@@ -72,8 +78,8 @@
 {
     <script>
         $(document).ready(function () {
+            var personTable = DataTableFunc.initDataTable('persontable');
             var dt = Entity.Init('Home', 'formPerson', 'persontable', '.entitysubmit', 'Success!', 'Error');
-          
         });
     </script>
 }

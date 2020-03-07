@@ -6,11 +6,7 @@ namespace AspCoreDataTable.Core.DataTable.Columns
 {
     public class ColumnBuilder<TModel> where TModel : class
     {
-        private TableBuilder<TModel> TableBuilder
-        {
-            get;
-            set;
-        }
+        private TableBuilder<TModel> TableBuilder { get; set; }
         public ColumnBuilder(TableBuilder<TModel> tableBuilder)
         {
             TableBuilder = tableBuilder;

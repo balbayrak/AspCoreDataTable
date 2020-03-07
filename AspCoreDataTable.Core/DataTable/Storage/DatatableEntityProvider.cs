@@ -1,5 +1,8 @@
 ﻿using AspCoreDataTable.Core.DataTable.Columns;
+using AspCoreDataTable.Core.DataTable.Columns.Buttons;
+using AspCoreDataTable.Core.DataTable.Rows;
 using AspCoreDataTable.Core.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,26 +36,15 @@ namespace AspCoreDataTable.Core.DataTable.Storage
                 var dictionary = new Dictionary<string, dynamic>();
                 string primarykey = string.Empty;
 
-                if (datatableStorageObject.rowCssCondition != null)
+                if (datatableStorageObject.RowConditions != null)
                 {
-                    var result = ExpressionBuilder.Evaluation(_entities[i], datatableStorageObject.rowCssCondition.property);
-                    bool isEqueal = false;
+                    string rowCss = IsConditionEqualCss(_entities[i], datatableStorageObject.RowConditions);
 
-                    if(result is string)
+                    if (!string.IsNullOrEmpty(rowCss))
                     {
-                        isEqueal = ((string)result).Equals((string)datatableStorageObject.rowCssCondition.value, System.StringComparison.InvariantCultureIgnoreCase);
-                    }
-                    else
-                    {
-                        isEqueal = result.Equals(datatableStorageObject.rowCssCondition.value);
-                    }
-
-                    if(isEqueal)
-                    {
-                        dictionary[i.ToString()] = datatableStorageObject.rowCss;
+                        dictionary[i.ToString()] = rowCss;
                     }
                 }
-
 
                 foreach (var property in datatableProperties)
                 {
@@ -67,13 +59,13 @@ namespace AspCoreDataTable.Core.DataTable.Storage
                     }
                 }
 
-                dictionary["test"] = "test";
-
+             
                 if (datatableStorageObject.DatatableActions != null && datatableStorageObject.DatatableActions.Count > 0)
                 {
                     foreach (var item in datatableStorageObject.DatatableActions)
                     {
                         string tmp_ActionColumn = item.ActionColumn;
+                        
                         if (item.conditions != null)
                         {
                             bool conditionTrue = false;
@@ -81,9 +73,7 @@ namespace AspCoreDataTable.Core.DataTable.Storage
 
                             foreach (var condition in item.conditions)
                             {
-                                var conditionResult = ExpressionBuilder.Evaluation(_entities[i], condition.Value.property);
-
-                                if (conditionResult.Equals(condition.Value.value))
+                                if(IsConditionEqual(_entities[i], condition.Value))
                                 {
                                     conditionTrue = true;
                                     arr[condition.Key] = string.Empty;
@@ -116,5 +106,33 @@ namespace AspCoreDataTable.Core.DataTable.Storage
         }
 
         #endregion
+
+        private bool IsConditionEqual(TEntity entity, Condition condition)
+        {
+            object result = ExpressionBuilder.Evaluation(entity, condition.property);
+            bool isEqueal = false;
+
+            if (result is string)
+            {
+                isEqueal = ((string)result).Equals((string)condition.value, System.StringComparison.InvariantCultureIgnoreCase);
+            }
+            else
+            {
+                isEqueal  =  result.Equals(Convert.ChangeType(condition.value, result.GetType()));
+            }
+
+            return isEqueal;
+        }
+
+        private string IsConditionEqualCss(TEntity entity, List<RowCondition> conditions)
+        {
+            foreach (var condition in conditions)
+            {
+                if (IsConditionEqual(entity, condition.condition)) return condition.css;
+                else continue;
+            }
+
+            return null;
+        }
     }
 }

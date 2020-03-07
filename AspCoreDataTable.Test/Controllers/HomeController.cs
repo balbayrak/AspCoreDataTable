@@ -41,7 +41,7 @@ namespace AspCoreDataTable.Test.Controllers
                             city="liverpool",
                             country="ingiltere"
                         }},
-                    new Person() {id = Guid.NewGuid(),name="Henry",surname="Freeman",status = 0,
+                    new Person() {id = Guid.NewGuid(),name="Henry",surname="Freeman",status = -1,
                      PersonAdress = new PersonAdress
                      {
                             city="paris",

@@ -1,6 +1,7 @@
 ﻿using AspCoreDataTable.Core.DataTable.Abstract;
 using AspCoreDataTable.Core.DataTable.Columns;
 using AspCoreDataTable.Core.DataTable.Columns.Buttons;
+using AspCoreDataTable.Core.DataTable.Rows;
 using AspCoreDataTable.Core.DataTable.Storage;
 using AspCoreDataTable.Core.DataTable.Toolbar;
 using AspCoreDataTable.Core.DataTable.Toolbar.Buttons;
@@ -28,7 +29,6 @@ namespace AspCoreDataTable.Core.DataTable
         private PortletForm _tablePortletSetting { get; set; }
         private EnumPagingType _pagingType { get; set; }
         private string _id { get; set; }
-
         private string _cssClass { get; set; }
 
         private bool _searchable { get; set; }
@@ -37,9 +37,7 @@ namespace AspCoreDataTable.Core.DataTable
 
         private bool _stateSave { get; set; }
 
-        private string _rowCss { get; set; }
-
-        private Condition _rowCondition { get; set; }
+        private IList<RowCondition> _rowConditions { get; set; }
 
         private IList<ITableColumnInternal> _tableColumns { get; set; }
 
@@ -51,8 +49,6 @@ namespace AspCoreDataTable.Core.DataTable
             this._id = id;
             this._searchable = true;
             this._stateSave = false;
-            this._rowCss = null;
-            this._rowCondition = null;
         }
 
         public ITableBuilder<TModel> Columns(Action<ColumnBuilder<TModel>> columnBuilder)
@@ -65,13 +61,28 @@ namespace AspCoreDataTable.Core.DataTable
             return this;
         }
 
-        public ITableBuilder<TModel> RowsCssCondition<TProperty>(Expression<Func<TModel, TProperty>> expression, object value, string css)
+        public ITableBuilder<TModel> RowCssConditions(Action<RowCssBuilder<TModel>> rowCssBuilder)
         {
-            this._rowCondition = new Condition();
-            string memberStr = (expression.Body as MemberExpression).ToString();
-            this._rowCondition.property = memberStr;
-            this._rowCondition.value = value;
-            this._rowCss = css;
+            if (rowCssBuilder != null)
+            {
+                RowCssBuilder<TModel> builder = new RowCssBuilder<TModel>(this);
+                rowCssBuilder(builder);
+            }
+            return this;
+        }
+
+        public ITableBuilder<TModel> AddRowCss<TProperty>(Expression<Func<TModel, TProperty>> expression, object value, string css)
+        {
+            this._rowConditions = this._rowConditions ?? new List<RowCondition>();
+            this._rowConditions.Add(new RowCondition
+            {
+                condition = new Condition
+                {
+                    property = (expression.Body as MemberExpression).ToString(),
+                    value = value
+                },
+                css = css
+            });
             return this;
         }
 
@@ -114,8 +125,8 @@ namespace AspCoreDataTable.Core.DataTable
             DatatableStorageObject<TModel> datatableStorageObject = new DatatableStorageObject<TModel>();
             datatableStorageObject.DatatableProperties = new List<DatatableBoundColumn<TModel>>();
 
-            datatableStorageObject.rowCssCondition = _rowCondition;
-            datatableStorageObject.rowCss = _rowCss;
+            if (_rowConditions != null)
+                datatableStorageObject.RowConditions = _rowConditions.ToList();
 
             int indexCounter = 1;
             string modals = string.Empty;
@@ -296,10 +307,6 @@ namespace AspCoreDataTable.Core.DataTable
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
             writer.Write(this.ToHtml());
-
-            writer.Write("<script> $(document).ready(function () {");
-            writer.Write($"var {_id} = DataTableFunc.initDataTable('{_id}');");
-            writer.Write("}</script>");
         }
     }
 }
