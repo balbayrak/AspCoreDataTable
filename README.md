@@ -1,7 +1,7 @@
 
 # AspCoreDataTable
 
-A htmlHelper for jquery datatable. This helper provides server side ability with wrapping jquery datatable. Create a datatable without knowing jquery datatable usage.
+A htmlHelper for [jquery datatable](https://datatables.net/) . This helper provides server side ability with wrapping jquery datatable. Create a datatable without knowing jquery datatable usage.
 
 * **Add AspCoreDataTable package to your project.**
 
@@ -33,7 +33,7 @@ alertify,bootbox,sweetalert,toastr (These support by htmlHelper with confirm ser
 
 After adding the AspCoreDataTable dll in your project, you can follow these steps for creating your own datatable.
 
-* **Add a using on the library in the *_ViewImports.cshtml* file.**
+* **Add a using on the library in the *_ViewImports.cshtml* file**
 
 ```csharp
 @using AspCoreDataTable.Core.DataTable;
@@ -58,7 +58,7 @@ The easy way to use it for creating tables is to call the htmlHelper with your t
                 ...
 ```
 
-* **Add table load action your server side codes.**
+* **Add table load action your server side codes**
 
 When dealing with thousands of data rows it can be helpfull to use the serverside configuration. You can use paging configuration for getting data.
 
@@ -83,6 +83,11 @@ When dealing with thousands of data rows it can be helpfull to use the serversid
         }
 
 
+
+```
+* **Extension method for retrieving data**
+
+```csharp
  public static JQueryDataTablesResponse ToJqueryDataTablesResponse<TEntity>(this JQueryDataTablesModel model, IEnumerable<TEntity> collection)
             where TEntity : class
         {
@@ -105,9 +110,119 @@ When dealing with thousands of data rows it can be helpfull to use the serversid
         }
 ```
 * **Add table columns with using expression of entity properties**
-Columns are defined regarding to properties of entity.
-```csharp
 
+Columns are defined regarding to properties of entity. Columns can be different types, *BoundColumn*, *CheckColumn*, *ActionColumn* 
+
+```csharp
+  @(Html.DataTableHelper<Person>("persontable")
+            .LoadAction("/Home/LoadTable")
+            .Columns(column =>
+            {
+                //add checkbox  as tablecolumn or table column header. Checkbox value select with expression. 
+                column.CheckColumn(p => p.id).CheckAllEnabled();
+                //add bound column with title. Column which selected with IsPrimaryKey method, is hidden automatically.
+                column.BoundColumn(p => p.id).Title("ID").IsPrimaryKey(true);
+                //Add searchable method for string property of entity. This search method can use by serverside action.
+                column.BoundColumn(p => p.name).Title("Name").Searchable(Operation.StartsWith);
+                //add column with nested property of entity.
+                column.BoundColumn(p => p.PersonAdress.city).Title("City").Searchable(Operation.StartsWith);
+                                        ...
 ```
 
+You can create action columns with one action button or more. You can add *ActionButton*, *ModalButton*, *ConfirmButton*, *DownloadButton*
+```csharp
+ column.ActionColumn().Title("Actions").Actions(action =>
+                {
+                    action.ModalButton()
+                        //You can hidden button regarding to propert value.
+                        .Hidden(t => t.PersonAdress.city, "istanbul")
+                        .Text("Edit")
+                        .CssClass("btn btn-sm green btn-outline filter-submit margin-bottom green-haze")
+                        .IClass("fa fa-edit")
+                        .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit", methodType = EnumHttpMethod.GET })
+                        .BlockUI()
+                        .Modal(EnumModalSize.Large)
+                        .BackDropStatic();
+
+                    action.ConfirmButton()
+                        .Hidden(t => t.name, "Linda")
+                        .Text("Delete")
+                        .CssClass("btn btn-sm red btn-outline filter-submit margin-bottom red-haze")
+                        .IClass("fa fa-trash-o")
+                        .ActionInfo(new ActionInfo { actionUrl = "/Home/Delete", methodType = EnumHttpMethod.POST })
+                        .BlockUI()
+                        .ConfirmOption(new ConfirmOption("ConfirmMessage", "ConfirmTitle", ConfirmType.Sweet, ""));
+                });
+```
+
+* **Add table toolbar action**
+
+You can create toolbar button left side or right side of your table and enable or disable search, print, export options.
+```csharp
+.ToolBarActions(action =>
+            {
+                action.ModalActionButton()
+                    .FormSide(EnumFormSide.LetfSide)
+                    .Text("Add New Person")
+                    .Modal(EnumModalSize.Default)
+                    .BackDropStatic()
+                    .CssClass("btn btn-sm red btn-outline filter-submit margin-bottom red-haze")
+                    .IClass("fa fa-plus")
+                    .ActionInfo(new ActionInfo { actionUrl = "/Home/AddOrEdit/-1", methodType = EnumHttpMethod.GET })
+                    .BlockUI();
+
+            }, new TableExportSetting("Tools", "btn red btn-outline", false, true, true, true, EnumFormSide.RightSide))
+```
+
+* **Add table rows css condition**
+
+You can create condition for rows with using expression of property and css value.
+
+Create css in your custom css file.
+
+```css
+.red {
+    background-color: #f2dede;
+}
+
+.yellow {
+    background-color: #FFFACD;
+}
+
+.blue {
+    background-color: #87CEEB;
+}
+```
+Use these css in your row condition.
+
+```csharp
+.RowCssConditions(condition =>
+{
+    condition.AddRowCss(p => p.status, 1, "red");
+    condition.AddRowCss(p => p.status, 0, "yellow");
+    condition.AddRowCss(p => p.status, -1, "blue");
+})
+```
+
+* **Wrapping table with portlet**
+```csharp
+.Portlet("Person Table", System.Drawing.Color.Red, "fa fa-cogs")
+```
+
+* **Add `css` for table**
+```csharp
+.CssClass("table table-striped table-hover table-bordered  dataTable no-footer")
+```
+
+* **Add `statesave` option for table**
+```csharp
+.StateSave(true)
+```
+* **Add `pagingtype` option for table**
+```csharp
+.PagingType(EnumPagingType.bootstrap_number)
+```
+
+# Test Project
+You can see all usage in *AspCoreDataTable.Test.csproj* project.
 
