@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Authors>Bilal Albayrak</Authors>
+    <Description>A htmlHelper for jquery datatable . This helper provides server side ability with wrapping jquery datatable. Create a datatable without knowing jquery datatable usage.</Description>
+    <PackageProjectUrl>https://github.com/balbayrak/AspCoreDataTable</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/balbayrak/AspCoreDataTable</RepositoryUrl>
+    <PackageTags>jquery datatable,datatable,serverside datatable</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

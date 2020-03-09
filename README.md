@@ -6,7 +6,7 @@ A htmlHelper for [jquery datatable](https://datatables.net/) . This helper provi
 * **Add AspCoreDataTable package to your project.**
 
 ```
- PM> Install-Package AspCoreDataTable
+ PM> Install-Package AspCoreDataTable.Core
 ```
 
 ## Dependencies
