@@ -76,9 +76,7 @@ namespace AspCoreDataTable.Test.Controllers
             {
                 // ignored
             }
-
             return null;
-
         }
 
         [HttpPost]

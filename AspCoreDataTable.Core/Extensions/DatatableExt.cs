@@ -110,7 +110,7 @@ namespace AspCoreDataTable.Core.Extensions
             return compressedString;
         }
 
-        public static Expression<Func<TEntity, bool>> GetSearchExpression<TEntity>(this DatatableStorageObject<TEntity> storageObject, string searchValue) where TEntity : class
+        private static Expression<Func<TEntity, bool>> GetSearchExpression<TEntity>(this DatatableStorageObject<TEntity> storageObject, string searchValue) where TEntity : class
         {
             Expression<Func<TEntity, bool>> expression = null;
             var list = storageObject.DatatableProperties.Where(t => t.searchable != null);
