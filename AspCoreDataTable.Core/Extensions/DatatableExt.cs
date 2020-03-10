@@ -1,4 +1,5 @@
-﻿using AspCoreDataTable.Core.DataTable.Storage;
+﻿using AspCoreDataTable.Core.DataTable.Columns.Buttons;
+using AspCoreDataTable.Core.DataTable.Storage;
 using AspCoreDataTable.Core.General;
 using AspCoreDataTable.Core.General.Enums;
 using AspCoreDataTable.General;
@@ -155,5 +156,15 @@ namespace AspCoreDataTable.Core.Extensions
                 return parser.Parse(model, collection.Count(), result.Count);
             }
         }
+
+        public static Condition ToCondition<TModel, TProperty>(this Expression<Func<TModel, TProperty>> expression, object value)
+        {
+            Condition condition = new Condition();
+            string memberStr = (expression.Body as MemberExpression).ToString();
+            condition.property = memberStr;
+            condition.value = value;
+            return condition;
+        }
+
     }
 }

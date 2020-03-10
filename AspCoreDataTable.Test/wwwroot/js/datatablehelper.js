@@ -10,6 +10,18 @@
     PaginatePrevious: "Önceki"
 };
 
+var DataTableConstantEn =
+{
+    EmptyMessage: "No data available in table",
+    SInfo: "Showing _START_ to _END_ of _TOTAL_ entries",
+    LoadingRecords: "Loading...",
+    SSearch: "Search",
+    PaginateFirst: "First",
+    PaginateLast: "Last",
+    PaginateNext: "Next",
+    PaginatePrevious: "Previous"
+};
+
 
 var DataTableFunc = {
 
